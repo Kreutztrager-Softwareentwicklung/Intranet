@@ -10,6 +10,9 @@ namespace Intranet2.Pages.Ansprechpartner
         private readonly MitarbeiterService _mitarbeiterService;
         private readonly MitarbeiterFotoService _fotoService;
 
+        // Ab dieser Anzahl wird paginiert
+        private const int SeitenGroesse = 30;
+
         public StandortModel(
             MitarbeiterService mitarbeiterService,
             MitarbeiterFotoService fotoService)
@@ -21,33 +24,51 @@ namespace Intranet2.Pages.Ansprechpartner
         public string Niederlassung { get; set; } = string.Empty;
         public string HervorgehobenerBenutzername { get; set; } = string.Empty;
         public List<Mitarbeiter> Mitarbeiter { get; set; } = new();
-
-        // NEU: Fotos werden nicht mehr serverseitig geladen
-        // Die View baut die URL direkt aus dem Namen
         public Dictionary<string, string?> Fotos { get; set; } = new();
+        public int GesamtAnzahl { get; set; }
+        public int AktuelleSeite { get; set; } = 1;
+        public bool HatMehrSeiten { get; set; }
 
-        public IActionResult OnGet(string niederlassung, string? person = null)
+        public IActionResult OnGet(string niederlassung, string? person = null, int seite = 1)
         {
             if (string.IsNullOrWhiteSpace(niederlassung))
                 return RedirectToPage("/Ansprechpartner/Ansprechpartner");
 
             Niederlassung = niederlassung;
-            Mitarbeiter = _mitarbeiterService.GetMitarbeiterFuerNiederlassung(niederlassung);
+            AktuelleSeite = seite < 1 ? 1 : seite;
 
+            var alle = _mitarbeiterService.GetMitarbeiterFuerNiederlassung(niederlassung);
+            GesamtAnzahl = alle.Count;
+
+            // Gesuchte Person immer auf Seite 1 ganz oben
             if (!string.IsNullOrWhiteSpace(person))
             {
                 HervorgehobenerBenutzername = person.Trim();
-                Mitarbeiter = Mitarbeiter
+                alle = alle
                     .OrderByDescending(m => string.Equals(
                         m.SamAccountName,
                         HervorgehobenerBenutzername,
                         StringComparison.OrdinalIgnoreCase))
                     .ToList();
+                AktuelleSeite = 1;
             }
 
-            // Nur gecachte Foto-URLs verwenden – kein Fileserver-Zugriff beim Laden
-            // Nicht gecachte Fotos werden als null zurückgegeben → Initialen-Avatar
-            // Der Browser lädt die Bilder dann lazy nach
+            // Paginierung – nur wenn mehr als SeitenGroesse Mitarbeiter
+            if (GesamtAnzahl > SeitenGroesse)
+            {
+                Mitarbeiter = alle
+                    .Skip((AktuelleSeite - 1) * SeitenGroesse)
+                    .Take(SeitenGroesse)
+                    .ToList();
+                HatMehrSeiten = AktuelleSeite * SeitenGroesse < GesamtAnzahl;
+            }
+            else
+            {
+                // Kleine Niederlassungen: alle auf einmal
+                Mitarbeiter = alle;
+                HatMehrSeiten = false;
+            }
+
             Fotos = Mitarbeiter.ToDictionary(
                 m => m.SamAccountName,
                 m => _fotoService.GetFotoUrl(m.BereinigterNachname, m.BereinigterVorname));

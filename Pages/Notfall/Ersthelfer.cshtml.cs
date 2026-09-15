@@ -39,7 +39,8 @@ namespace Intranet2.Pages.Notfall
             "risthaus",
             "erlhoff",
             "kautz",
-            "mindt"
+            "mindt",
+            "heimbold"
         };
 
         public void OnGet()

@@ -3,11 +3,13 @@ using Intranet2.Services.Fotos;
 
 namespace Intranet2.Services
 {
-    public class MitarbeiterCacheWarmup : IHostedService
+    public class MitarbeiterCacheWarmup : BackgroundService
     {
         private readonly MitarbeiterService _mitarbeiterService;
         private readonly MitarbeiterFotoService _fotoService;
         private readonly ILogger<MitarbeiterCacheWarmup> _logger;
+
+        private static readonly TimeSpan WiederholungsIntervall = TimeSpan.FromHours(7);
 
         public MitarbeiterCacheWarmup(
             MitarbeiterService mitarbeiterService,
@@ -19,41 +21,63 @@ namespace Intranet2.Services
             _logger = logger;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _ = Task.Run(() =>
+            // Beim Start sofort ausführen – OHNE CancellationToken
+            // damit der Warmup nicht abgebrochen wird
+            WaermeCache();
+
+            while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    _logger.LogInformation("Cache-Warmup: Lade Mitarbeiter aus dem Active Directory...");
+                    await Task.Delay(WiederholungsIntervall, stoppingToken);
+                    WaermeCache();
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
+            }
+        }
+
+        private void WaermeCache()
+        {
+            // Läuft auf einem eigenen Thread – KEIN CancellationToken
+            // damit er garantiert bis zum Ende durchläuft
+            Task.Run(() =>
+            {
+                try
+                {
+                    _logger.LogInformation("Cache-Warmup: Starte um {Zeit}...", DateTime.Now.ToString("HH:mm:ss"));
+
+                    // 1. Mitarbeiter aus AD laden
                     var mitarbeiter = _mitarbeiterService.GetMitarbeiter();
-                    _logger.LogInformation("Cache-Warmup: {Anzahl} Mitarbeiter geladen.", mitarbeiter.Count);
+                    _logger.LogInformation("Cache-Warmup: {Anzahl} Mitarbeiter aus AD geladen.", mitarbeiter.Count);
 
-                    // Ordnerindex einmalig laden (wird intern gecacht)
-                    _logger.LogInformation("Cache-Warmup: Indexiere Foto-Ordner...");
-                    _fotoService.GetOrdnerIndex();
+                    // 2. Ordnerindex laden
+                    _logger.LogInformation("Cache-Warmup: Lade Foto-Ordnerindex...");
+                    var index = _fotoService.GetOrdnerIndex();
+                    _logger.LogInformation("Cache-Warmup: {Anzahl} Foto-Ordner indexiert.", index.Count);
 
-                    // ✅ Alle Fotos PARALLEL vorwärmen
-                    // ✅ BereinigterNachname/BereinigterVorname – gleiche Keys wie die Seite!
-                    _logger.LogInformation("Cache-Warmup: Lade Mitarbeiterfotos parallel...");
-                    mitarbeiter
-                        .AsParallel()
-                        .WithCancellation(cancellationToken)
-                        .ForAll(m => _fotoService.GetFotoUrl(
-                            m.BereinigterNachname,
-                            m.BereinigterVorname));
+                    // 3. Alle Fotos parallel vorwärmen – KEIN CancellationToken!
+                    _logger.LogInformation("Cache-Warmup: Wärme Fotos vor...");
+                    int count = 0;
+                    mitarbeiter.AsParallel()
+                        .ForAll(m =>
+                        {
+                            _fotoService.GetFotoUrl(m.BereinigterNachname, m.BereinigterVorname);
+                            Interlocked.Increment(ref count);
+                        });
 
-                    _logger.LogInformation("Cache-Warmup: Abgeschlossen.");
+                    _logger.LogInformation("Cache-Warmup: {Anzahl} Fotos vorgewärmt.", count);
+                    _logger.LogInformation("Cache-Warmup: Abgeschlossen um {Zeit}.", DateTime.Now.ToString("HH:mm:ss"));
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Cache-Warmup fehlgeschlagen.");
                 }
-            }, cancellationToken);
-
-            return Task.CompletedTask;
+            });
         }
-
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
 }
