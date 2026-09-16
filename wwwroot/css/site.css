@@ -581,7 +581,6 @@ img {
         min-height: 56px;
     }
 }
-}
 
 @media (max-width: 991.98px) {
     .kt-topbar-inner {
@@ -1455,6 +1454,35 @@ img {
         flex-direction: column;
     }
 }
+
+/* =========================================================
+   UMFRAGEN - ERSTELLER
+   ========================================================= */
+
+.poll-card-ersteller {
+    margin-top: 0.35rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+    .poll-card-ersteller strong {
+        color: var(--kt-dunkelblau);
+        font-weight: 600;
+    }
+
+/* =========================================================
+   UMFRAGE-DETAILS - ERSTELLER
+   ========================================================= */
+
+.poll-detail-ersteller {
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+}
+
+    .poll-detail-ersteller strong {
+        color: var(--kt-dunkelblau);
+        font-weight: 600;
+    }
 
 /* =========================================================
    19. MARKTPLATZ

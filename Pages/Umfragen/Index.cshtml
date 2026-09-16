@@ -59,6 +59,15 @@
                                     @umfrage.Frage
                                 </h3>
 
+                                <div class="poll-card-ersteller">
+                                    <span class="text-muted small">
+                                        Erstellt von:
+                                        <strong>
+                                            @Model.GetErstellerName(umfrage.ErstelltVon)
+                                        </strong>
+                                    </span>
+                                </div>
+
                                 @if (!string.IsNullOrWhiteSpace(umfrage.Beschreibung))
                                 {
                                     <p class="text-muted">
@@ -132,6 +141,15 @@
                                 <h3 class="poll-card-title">
                                     @umfrage.Frage
                                 </h3>
+
+                                <div class="poll-card-ersteller">
+                                    <span class="text-muted small">
+                                        Erstellt von:
+                                        <strong>
+                                            @Model.GetErstellerName(umfrage.ErstelltVon)
+                                        </strong>
+                                    </span>
+                                </div>
 
                                 @if (!string.IsNullOrWhiteSpace(umfrage.Beschreibung))
                                 {

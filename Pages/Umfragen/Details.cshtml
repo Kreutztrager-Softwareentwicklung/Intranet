@@ -35,10 +35,28 @@
                     </span>
                 </div>
 
-                <!-- FRAGE -->
+                <!-- =====================================================
+                FRAGE
+                ===================================================== -->
+
                 <h1 class="poll-detail-title">
                     @Model.Umfrage.Frage
                 </h1>
+
+
+                <!-- =====================================================
+                     ERSTELLER
+                     ===================================================== -->
+
+                <div class="poll-detail-ersteller text-muted small mb-3">
+
+                    Erstellt von:
+
+                    <strong>
+                        @Model.UmfrageErstellerName
+                    </strong>
+
+                </div>
 
                 @if (!string.IsNullOrWhiteSpace(Model.Umfrage.Beschreibung))
                 {

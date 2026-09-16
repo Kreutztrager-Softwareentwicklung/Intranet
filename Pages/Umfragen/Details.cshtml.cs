@@ -14,6 +14,8 @@ namespace Intranet2.Pages.Umfragen
 
         public Umfrage Umfrage { get; set; } = null!;
 
+        public string UmfrageErstellerName { get; set; } = "Nicht hinterlegt";
+
         public bool IstBeendet { get; set; }
 
         public int? EigeneOptionId { get; set; }
@@ -36,6 +38,23 @@ namespace Intranet2.Pages.Umfragen
             }
 
             Umfrage = umfrage;
+
+            // ERSTELLER DER UMFRAGE ERMITTELN
+            if (!string.IsNullOrWhiteSpace(umfrage.ErstelltVon))
+            {
+                string erstellerWindowsBenutzername = umfrage.ErstelltVon;
+
+                string? erstellerAnzeigename = await _context.Benutzer
+                    .AsNoTracking()
+                    .Where(b =>
+                        b.WindowsBenutzername == erstellerWindowsBenutzername)
+                    .Select(b => b.Name)
+                    .FirstOrDefaultAsync();
+
+                UmfrageErstellerName = !string.IsNullOrWhiteSpace(erstellerAnzeigename)
+                        ? erstellerAnzeigename
+                        : erstellerWindowsBenutzername;
+            }
 
             IstBeendet = umfrage.EndetAm.HasValue && umfrage.EndetAm.Value < jetzt;
 

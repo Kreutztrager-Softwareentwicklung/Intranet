@@ -119,6 +119,11 @@
                                 @Model.AktiveUmfrage.Frage
                             </h3>
 
+                            <div class="home-poll-ersteller text-muted small mb-2">
+                                Erstellt von:
+                                <strong>@Model.UmfrageErstellerName</strong>
+                            </div>
+
                             @if (!string.IsNullOrWhiteSpace(Model.AktiveUmfrage.Beschreibung))
                             {
                                 <p class="home-poll-description">

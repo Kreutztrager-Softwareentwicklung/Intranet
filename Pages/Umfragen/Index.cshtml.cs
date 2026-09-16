@@ -19,6 +19,23 @@ namespace Intranet2.Pages.Umfragen
 
         public List<Umfrage> VergangeneUmfragen { get; set; } = new();
 
+        public Dictionary<string, string> ErstellerNamen { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+        public string GetErstellerName(string? windowsBenutzername)
+        {
+            if (string.IsNullOrWhiteSpace(windowsBenutzername))
+            {
+                return "Nicht hinterlegt";
+            }
+
+            if (ErstellerNamen.TryGetValue(windowsBenutzername, out string? name))
+            {
+                return name;
+            }
+
+            return windowsBenutzername;
+        }
+
         // SEITE LADEN
         public async Task OnGetAsync()
         {
@@ -35,6 +52,29 @@ namespace Intranet2.Pages.Umfragen
 
             // VERGANGENE UMFRAGEN
             VergangeneUmfragen = umfragen.Where(u => u.EndetAm.HasValue && u.EndetAm.Value < jetzt).ToList();
+
+            // Windows-Benutzernamen der Ersteller sammeln
+            var benutzernamen = umfragen
+                .Select(u => u.ErstelltVon)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            // Anzeigenamen aus der Benutzertabelle laden
+            var benutzer = await _context.Benutzer.AsNoTracking().Where(b => benutzernamen.Contains(b.WindowsBenutzername))
+                .Select(b => new
+                {
+                    b.WindowsBenutzername,
+                    b.Name
+                })
+                .ToListAsync();
+
+            // Zuordnung für die Anzeige
+            ErstellerNamen = benutzer.ToDictionary(
+                b => b.WindowsBenutzername,
+                b => b.Name,
+                StringComparer.OrdinalIgnoreCase);
         }
     }
 }

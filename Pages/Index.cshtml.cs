@@ -21,6 +21,8 @@ namespace Intranet2.Pages
         // UMFRAGE
         public Umfrage? AktiveUmfrage { get; set; }
 
+        public string UmfrageErstellerName { get; set; } = "Nicht hinterlegt";
+
         public int? EigeneOptionId { get; set; }
 
         public int GesamtStimmen { get; set; }
@@ -48,6 +50,21 @@ namespace Intranet2.Pages
             if (AktiveUmfrage == null)
             {
                 return;
+            }
+
+            // ERSTELLER DER AKTIVEN UMFRAGE ERMITTELN
+            if (!string.IsNullOrWhiteSpace(AktiveUmfrage.ErstelltVon))
+            {
+                string erstellerWindowsBenutzername = AktiveUmfrage.ErstelltVon;
+
+                string? anzeigename = await _context.Benutzer
+                    .AsNoTracking()
+                    .Where(b =>
+                        b.WindowsBenutzername == erstellerWindowsBenutzername)
+                    .Select(b => b.Name)
+                    .FirstOrDefaultAsync();
+
+                UmfrageErstellerName = !string.IsNullOrWhiteSpace(anzeigename) ? anzeigename : erstellerWindowsBenutzername;
             }
 
             GesamtStimmen = AktiveUmfrage.Optionen.Sum(o => o.Stimmen.Count);
