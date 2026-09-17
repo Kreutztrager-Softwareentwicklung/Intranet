@@ -3,18 +3,26 @@ using Intranet2.Datenbank.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Intranet2.Services.ActiveDirectory;
 
 namespace Intranet2.Pages.Umfragen
 {
     public class DetailsModel : PageModel
     {
         private readonly DataContext _context;
+        private readonly MitarbeiterService _mitarbeiterService;
 
-        public DetailsModel(DataContext context) { _context = context; }
+        public DetailsModel(DataContext context, MitarbeiterService mitarbeiterService)
+        {
+            _context = context;
+            _mitarbeiterService = mitarbeiterService;
+        }
 
         public Umfrage Umfrage { get; set; } = null!;
 
         public string UmfrageErstellerName { get; set; } = "Nicht hinterlegt";
+
+        public string? UmfrageErstellerTeamsLink { get; set; }
 
         public bool IstBeendet { get; set; }
 
@@ -44,16 +52,32 @@ namespace Intranet2.Pages.Umfragen
             {
                 string erstellerWindowsBenutzername = umfrage.ErstelltVon;
 
-                string? erstellerAnzeigename = await _context.Benutzer
+                // Ersteller aus der Benutzertabelle laden
+                var ersteller = await _context.Benutzer
                     .AsNoTracking()
-                    .Where(b =>
-                        b.WindowsBenutzername == erstellerWindowsBenutzername)
-                    .Select(b => b.Name)
+                    .Where(b => b.WindowsBenutzername == erstellerWindowsBenutzername)
+                    .Select(b => new
+                    {
+                        b.Name,
+                        b.Email
+                    })
                     .FirstOrDefaultAsync();
 
-                UmfrageErstellerName = !string.IsNullOrWhiteSpace(erstellerAnzeigename)
-                        ? erstellerAnzeigename
-                        : erstellerWindowsBenutzername;
+                // Mitarbeiter im Active Directory suchen
+                Mitarbeiter? mitarbeiter = _mitarbeiterService.GetMitarbeiterFuerBenutzername(erstellerWindowsBenutzername);
+
+                // Vollständigen Vor- und Nachnamen verwenden
+                UmfrageErstellerName = !string.IsNullOrWhiteSpace(mitarbeiter?.Anzeigename) ? mitarbeiter.Anzeigename
+                    : !string.IsNullOrWhiteSpace(ersteller?.Name) ? ersteller.Name : erstellerWindowsBenutzername;
+
+                // E-Mail bevorzugt aus dem Active Directory laden
+                string? email = !string.IsNullOrWhiteSpace(mitarbeiter?.Email) ? mitarbeiter.Email : ersteller?.Email;
+
+                // Teams-Link erstellen
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    UmfrageErstellerTeamsLink = "https://teams.microsoft.com/l/chat/0/0?users=" + Uri.EscapeDataString(email.Trim());
+                }
             }
 
             IstBeendet = umfrage.EndetAm.HasValue && umfrage.EndetAm.Value < jetzt;

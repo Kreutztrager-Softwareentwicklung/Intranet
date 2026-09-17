@@ -115,8 +115,11 @@
                                 Umfrage
                             </div>
 
+                            <!-- ANKLICKBARE UMFRAGE -->
                             <h3 class="home-poll-title">
-                                @Model.AktiveUmfrage.Frage
+                                <a asp-page="/Umfragen/Index" class="home-poll-link">
+                                    @Model.AktiveUmfrage.Frage
+                                </a>
                             </h3>
 
                             <div class="home-poll-ersteller text-muted small mb-2">

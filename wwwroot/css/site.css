@@ -7,6 +7,7 @@
 /* =========================================================
    SCHRIFTARTEN – exakt wie auf der Homepage eingebunden
    ========================================================= */
+
 @font-face {
     font-family: "Gotham Bold";
     src: url("https://kreutztraeger-kaeltetechnik.de/wp-content/uploads/2021/11/Gotham-Bold.woff") format("woff"), url("https://kreutztraeger-kaeltetechnik.de/wp-content/uploads/2021/11/Gotham-Bold.ttf") format("truetype");
@@ -31,8 +32,8 @@
 /* =========================================================
    1. KREUTZTRÄGER DESIGN-VARIABLEN
    ========================================================= */
+
 :root {
-    /* Exakte Farben aus dem Homepage-Quellcode */
     --kt-hellblau: #0091b6;
     --kt-hellblau-hover: #007a9a;
     --kt-dunkelblau: #273551;
@@ -47,13 +48,11 @@
     --kt-radius-lg: 14px;
     --kt-shadow-sm: 0 2px 10px rgba(39, 53, 81, 0.08);
     --kt-shadow-md: 0 4px 12px rgba(39, 53, 81, 0.12);
-    /* Homepage-Navigationsfarben (direkt aus gusta_inline_css) */
-    --kt-nav-bg: #f0f1f4; /* Hintergrund Menüleiste */
-    --kt-nav-hover-bg: #e7e8ec; /* Hover-Hintergrund */
-    --kt-nav-text: #242e51; /* Textfarbe normal */
-    --kt-nav-hover-text: #02a0c7; /* Textfarbe Hover/Aktiv */
-    --kt-nav-border: #ffffff; /* Trennlinie zwischen Items */
-    /* Topbar (Logo-Bereich) – Homepage: padding: 2vh 4vw */
+    --kt-nav-bg: #f0f1f4;
+    --kt-nav-hover-bg: #e7e8ec;
+    --kt-nav-text: #242e51;
+    --kt-nav-hover-text: #02a0c7;
+    --kt-nav-border: #ffffff;
     --kt-topbar-bg: #ffffff;
     --kt-topbar-padding-v: 2vh;
     --kt-topbar-padding-h: 4vw;
@@ -62,11 +61,13 @@
 /* =========================================================
    2. GLOBALE BASIS
    ========================================================= */
+
 html {
     scroll-behavior: smooth;
 }
 
-html, body {
+html,
+body {
     min-height: 100%;
     margin: 0;
     padding: 0;
@@ -77,7 +78,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /* Exakt wie Homepage: "Gotham Book" als Hauptschrift */
     font-family: "Gotham Book", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
     line-height: 28px;
@@ -110,6 +110,7 @@ img {
 /* =========================================================
    3. BUTTONS UND FORMULARE
    ========================================================= */
+
 .btn {
     border-radius: var(--kt-radius-sm);
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -158,12 +159,9 @@ img {
 }
 
 /* =========================================================
-   4. TOPBAR (Logo-Bereich)
-   Exakt nach Homepage-Quellcode:
-   - Hintergrund: #ffffff
-   - Padding: 2vh 4vw  (aus vc_custom_1784541194551)
-   - Spalten: 3 / 6 / 3  (vc_col-sm-3 / vc_col-sm-6 / vc_col-sm-3)
+   4. TOPBAR
    ========================================================= */
+
 .kt-topbar {
     position: relative;
     width: 100%;
@@ -173,18 +171,15 @@ img {
 
 .kt-topbar-inner {
     display: grid;
-    /* 3 / 6 / 3 Spalten wie auf der Homepage */
     grid-template-columns: 25% 50% 25%;
     align-items: center;
     width: 100%;
     margin: 0;
-    /* Exakt: padding: 2vh 4vw */
     padding: 2vh 4vw;
     background-color: #ffffff;
     box-sizing: border-box;
 }
 
-/* Logo-Bereich (linke Spalte) */
 .kt-topbar-left {
     display: flex;
     align-items: center;
@@ -214,7 +209,6 @@ img {
     object-position: left center;
 }
 
-/* Mittlere Spalte (Intranet-Titel) */
 .kt-topbar-center {
     display: flex;
     align-items: center;
@@ -226,7 +220,6 @@ img {
     margin: 0;
     padding: 0;
     color: #242e51;
-    /* Gotham SSM wie auf der Homepage für Navigationstext */
     font-family: "Gotham SSM", "Gotham Book", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     font-size: 20px;
     line-height: 28px;
@@ -242,7 +235,6 @@ img {
         color: #0093be;
     }
 
-/* Rechte Spalte (Benutzer) */
 .kt-topbar-right {
     position: absolute;
     top: 0;
@@ -274,17 +266,8 @@ img {
 
 /* =========================================================
    5. HAUPTNAVIGATION
-   Exakt nach Homepage-Quellcode (gusta_inline_css):
-   - Hintergrund:       #f0f1f4  (--kt-nav-bg)
-   - Hover-Hintergrund: #e7e8ec  (--kt-nav-hover-bg)
-   - Textfarbe:         #242e51  (--kt-nav-text)
-   - Hover-Textfarbe:   #02a0c7  (--kt-nav-hover-text)
-   - Trennlinie:        1px solid #ffffff
-   - Schrift:           'Gotham SSM', font-weight: 600
-   - Schriftgröße:      15px (Homepage: font-size: 15px)
-   - Padding Links:     4vw (aus: padding-left:4vw !important)
-   - Mindesthöhe:       66px (aus: min-height: 66px)
    ========================================================= */
+
 .main-nav {
     position: sticky;
     top: 0;
@@ -311,7 +294,6 @@ img {
     margin: 0;
     padding: 0;
     gap: 0;
-    /* Trennlinien wie auf der Homepage: border-color: #ffffff */
     border-left: 1px solid #ffffff;
     border-right: 1px solid #ffffff;
 }
@@ -319,25 +301,17 @@ img {
 .main-nav .nav-item {
     display: flex;
     align-items: stretch;
-    flex: 1 1 0;
-    min-width: 0;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
     margin: 0;
     padding: 0;
-    /* Trennlinie zwischen Items: 1px solid #ffffff */
     border-right: 1px solid #ffffff;
 }
 
-/* --------------------------------------------------------
-   Hauptmenüpunkte
-   Exakt aus gusta_inline_css:
-   padding-left: 4vw
-   background-color: rgb(240, 241, 244)
-   font-family: 'Gotham+SSM'
-   font-weight: 600
-   color: rgb(36, 46, 81)
-   min-height: 66px (aus dem Intranet-CSS, passt zur Homepage)
-   font-size: 15px (Homepage: #menu > ul > li > a { font-size: 15px })
-   -------------------------------------------------------- */
+/* =========================================================
+   HAUPTMENÜPUNKTE
+   ========================================================= */
+
 .nav-box {
     display: flex;
     align-items: center;
@@ -345,27 +319,24 @@ img {
     width: 100%;
     min-height: 66px;
     margin: 0;
-    /* Padding stark reduziert: statt 0 4vw jetzt clamp */
-    padding: 0 clamp(0.4rem, 1vw, 1.2rem);
+    padding: 0 clamp(0.3rem, 0.8vw, 1rem) !important;
     color: #242e51 !important;
     background-color: #f0f1f4;
     font-family: "Gotham SSM", "Gotham Book", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    /* Schriftgröße skaliert automatisch mit der Breite */
-    font-size: clamp(11px, 1.1vw, 15px);
+    font-size: clamp(11px, 1vw, 14px) !important;
     line-height: 1.2;
     font-weight: 600;
-    letter-spacing: 0;
+    letter-spacing: -0.01em;
     text-align: center;
-    white-space: nowrap;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     text-decoration: none;
     border: 0;
     border-radius: 0;
     transition: color 0.25s ease-out, background-color 0.25s ease-out;
 }
 
-    /* Hover / Aktiv – exakt aus gusta_inline_css:
-   background-color: rgb(231, 232, 236)
-   color: #02a0c7 */
     .nav-box:hover,
     .nav-box:focus,
     .nav-item.dropdown:hover > .nav-box,
@@ -376,7 +347,6 @@ img {
         background-color: #e7e8ec;
     }
 
-/* Externe Links */
 .external-link-icon {
     margin-left: 0.3rem;
     font-size: 0.8em;
@@ -389,8 +359,9 @@ img {
 }
 
 /* =========================================================
-   DROPDOWNS
+   6. DROPDOWNS
    ========================================================= */
+
 .main-nav .nav-item.dropdown {
     position: relative;
 }
@@ -402,7 +373,6 @@ img {
         min-width: 230px;
         margin: 0;
         padding: 0.4rem 0;
-        /* Dropdown-Hintergrund wie auf der Homepage: #e7e8ec */
         background-color: #e7e8ec;
         border: none;
         border-radius: 0;
@@ -421,7 +391,6 @@ img {
         background-color: #e7e8ec;
     }
 
-/* Dropdown-Einträge */
 .main-nav .dropdown-item {
     display: block;
     width: 100%;
@@ -450,6 +419,7 @@ img {
 /* =========================================================
    7. VERSCHACHTELTE DROPDOWNS
    ========================================================= */
+
 .dropdown-submenu {
     position: relative;
 }
@@ -495,7 +465,9 @@ img {
 /* =========================================================
    8. DESKTOP-DROPDOWNS
    ========================================================= */
+
 @media (min-width: 992px) {
+
     .main-nav .dropdown-menu {
         z-index: 2000;
     }
@@ -521,6 +493,7 @@ img {
 /* =========================================================
    9. MOBILE NAVIGATION
    ========================================================= */
+
 .navbar-toggler {
     margin: 0.65rem 0;
     padding: 0.5rem 0.7rem;
@@ -540,7 +513,9 @@ img {
 /* =========================================================
    10. TABLET / MOBILE
    ========================================================= */
+
 @media (max-width: 1199.98px) {
+
     .kt-topbar-inner {
         grid-template-columns: auto 1fr auto;
         padding: 1.5vh 3vw;
@@ -574,7 +549,7 @@ img {
     .kt-user-name {
         font-size: 14px;
     }
-    /* Menüpunkte auf Tablet: etwas weniger Padding */
+
     .nav-box {
         padding: 0 clamp(0.3rem, 0.8vw, 1rem);
         font-size: clamp(10px, 1vw, 13px);
@@ -583,6 +558,7 @@ img {
 }
 
 @media (max-width: 991.98px) {
+
     .kt-topbar-inner {
         grid-template-columns: auto 1fr auto;
         padding: 1vh 1.25rem;
@@ -629,7 +605,6 @@ img {
     .main-nav .nav-item {
         display: flex;
         align-items: stretch;
-        /* Statt flex: 1 1 0 → Items nur so breit wie nötig, aber dehnbar */
         flex: 0 1 auto;
         min-width: 0;
         margin: 0;
@@ -691,7 +666,9 @@ img {
 /* =========================================================
    11. KLEINE BILDSCHIRME
    ========================================================= */
+
 @media (max-width: 575.98px) {
+
     .kt-topbar-inner {
         grid-template-columns: 1fr auto;
         grid-template-rows: auto auto;
@@ -743,6 +720,7 @@ img {
 /* =========================================================
    12. ACCESSIBILITY
    ========================================================= */
+
 .nav-box:focus-visible,
 .dropdown-item:focus-visible,
 .kt-intranet-title:focus-visible {
@@ -753,6 +731,7 @@ img {
 /* =========================================================
    15. JOBS / STELLENANGEBOTE
    ========================================================= */
+
 .jobs-page {
     padding-top: 1rem;
     padding-bottom: 3rem;
@@ -764,7 +743,7 @@ img {
     padding: 3.5rem;
     margin-bottom: 2rem;
     color: var(--kt-weiss);
-    background: linear-gradient(135deg, var(--kt-dunkelblau) 0%, #354769 100%);
+    background: linear-gradient( 135deg, var(--kt-dunkelblau) 0%, #354769 100% );
     border-radius: var(--kt-radius-lg);
 }
 
@@ -996,6 +975,7 @@ img {
 }
 
 @media (max-width: 767.98px) {
+
     .jobs-hero {
         padding: 2rem 1.5rem;
     }
@@ -1018,6 +998,7 @@ img {
 /* =========================================================
    16. STARTSEITE
    ========================================================= */
+
 .home-page {
     padding-top: 2rem;
     padding-bottom: 3rem;
@@ -1155,6 +1136,7 @@ img {
 }
 
 @media (max-width: 767.98px) {
+
     .home-section-header {
         flex-direction: column;
         align-items: flex-start;
@@ -1176,6 +1158,7 @@ img {
 /* =========================================================
    17. UMFRAGEN / STARTSEITEN-FEED
    ========================================================= */
+
 .home-poll {
     padding: 1.2rem;
     border-bottom: 1px solid var(--kt-border);
@@ -1301,8 +1284,30 @@ img {
 }
 
 /* =========================================================
+   STARTSEITE - ANKLICKBARE UMFRAGE
+   ========================================================= */
+
+.home-poll-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    .home-poll-link:hover,
+    .home-poll-link:focus {
+        color: var(--kt-hellblau);
+        text-decoration: underline;
+    }
+
+    .home-poll-link:focus-visible {
+        outline: 2px solid var(--kt-hellblau);
+        outline-offset: 3px;
+    }
+
+/* =========================================================
    18. UMFRAGEN - ÜBERSICHT UND DETAILSEITE
    ========================================================= */
+
 .poll-card {
     overflow: hidden;
     background: var(--kt-weiss);
@@ -1422,7 +1427,7 @@ img {
 
 .poll-detail-progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--kt-hellblau), var(--kt-hellblau-hover));
+    background: linear-gradient( 90deg, var(--kt-hellblau), var(--kt-hellblau-hover) );
     border-radius: 20px;
 }
 
@@ -1441,6 +1446,7 @@ img {
 }
 
 @media (max-width: 767.98px) {
+
     .poll-detail-card {
         padding: 1.3rem;
     }
@@ -1487,6 +1493,7 @@ img {
 /* =========================================================
    19. MARKTPLATZ
    ========================================================= */
+
 .marketplace-nav-badge {
     display: inline-flex;
     align-items: center;
@@ -1699,6 +1706,7 @@ img {
     }
 
 @media (max-width: 767.98px) {
+
     .marketplace-header {
         flex-direction: column;
         align-items: flex-start;
@@ -1722,6 +1730,7 @@ img {
 /* =========================================================
    20. MEIN PROFIL
    ========================================================= */
+
 .profile-card {
     overflow: hidden;
     background: var(--kt-weiss);
@@ -1763,6 +1772,7 @@ img {
         }
 
 @media (max-width: 575.98px) {
+
     .profile-row {
         grid-template-columns: 1fr;
         gap: 0.35rem;
@@ -1772,6 +1782,7 @@ img {
 /* =========================================================
    21. DOKUMENTE
    ========================================================= */
+
 .dokumente-page {
     max-width: 1100px;
 }
@@ -1875,6 +1886,7 @@ img {
     }
 
 @media (max-width: 575.98px) {
+
     .dokumente-accordion .accordion-button {
         padding: 1rem;
         font-size: 0.95rem;
@@ -1885,21 +1897,21 @@ img {
     }
 }
 
-/* =========================
+/* =========================================================
    BEAUFTRAGTE / ERSTHELFER KARTEN
-   ========================= */
+   ========================================================= */
 
 .beauftragten-card,
 .ersthelfer-card {
+    position: relative;
+    height: 100%;
+    padding: 1.5rem 1.25rem 1.25rem;
+    text-align: center;
     background: #fff;
     border: 1px solid #e3e6ee;
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-    padding: 1.5rem 1.25rem 1.25rem;
-    text-align: center;
-    position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    height: 100%;
 }
 
     .beauftragten-card:hover,
@@ -1910,46 +1922,46 @@ img {
 
 .beauftragten-badge {
     display: inline-block;
-    background: #24345d;
+    margin-bottom: 1rem;
+    padding: 0.35rem 0.7rem;
     color: #fff;
+    background: #24345d;
+    border-radius: 999px;
     font-size: 0.8rem;
     font-weight: 600;
     line-height: 1;
-    padding: 0.35rem 0.7rem;
-    border-radius: 999px;
-    margin-bottom: 1rem;
 }
 
 .beauftragten-bild-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 110px;
     height: 110px;
     margin: 0 auto 1rem auto;
-    border-radius: 50%;
     overflow: hidden;
     background: #eef2f7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 50%;
 }
 
 .beauftragten-bild {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
 }
 
 .beauftragten-bild-placeholder {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: #7a8597;
-    color: #fff;
-    font-size: 2rem;
-    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background: #7a8597;
+    border-radius: 50%;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
 .beauftragten-body {
@@ -1957,16 +1969,16 @@ img {
 }
 
 .beauftragten-untertitel {
+    margin-bottom: 0.35rem;
     color: #6c7890;
     font-size: 0.95rem;
-    margin-bottom: 0.35rem;
 }
 
 .beauftragten-name {
+    margin-bottom: 1rem;
+    color: #1c2c52;
     font-size: 1.45rem;
     font-weight: 700;
-    color: #1c2c52;
-    margin-bottom: 1rem;
 }
 
 .beauftragten-kontaktliste {
@@ -1983,8 +1995,8 @@ img {
 }
 
 .kontakt-label {
-    font-weight: 600;
     color: #4d5b78;
+    font-weight: 600;
 }
 
 .beauftragten-kontaktzeile a {
@@ -2002,13 +2014,12 @@ img {
     text-align: center;
 }
 
-/* Accordion-Abstand */
 .ersthelfer-accordion .accordion-body {
     padding-top: 1.25rem;
 }
 
-/* Mobile */
 @media (max-width: 767.98px) {
+
     .beauftragten-card,
     .ersthelfer-card {
         padding: 1.25rem 1rem;
@@ -2022,6 +2033,7 @@ img {
 /* =========================================================
    ANSPRECHPARTNER - ABTEILUNGEN / UNTERABTEILUNGEN
    ========================================================= */
+
 .abteilungen-container {
     width: 100%;
     max-width: 1100px;
@@ -2130,6 +2142,7 @@ img {
 }
 
 @media (max-width: 575.98px) {
+
     .abteilungen-container {
         padding-right: 0;
         padding-left: 0;
@@ -2157,6 +2170,7 @@ img {
 /* =========================================================
    ANSPRECHPARTNER - MITARBEITERSUCHE
    ========================================================= */
+
 .mitarbeiter-suche {
     position: relative;
     margin-bottom: 2rem;
@@ -2229,12 +2243,14 @@ img {
     }
 
 .mitarbeiter-suche-person {
+    position: relative;
     display: grid;
     grid-template-columns: 54px minmax(0, 1fr) auto;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
     background-color: var(--kt-weiss);
+    cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
@@ -2303,6 +2319,8 @@ img {
 }
 
 .mitarbeiter-suche-kontakt-link {
+    position: relative;
+    z-index: 2;
     color: var(--kt-hellblau);
     font-size: 0.78rem;
     font-weight: 500;
@@ -2325,6 +2343,7 @@ img {
 }
 
 @media (max-width: 767.98px) {
+
     .mitarbeiter-suche-person {
         grid-template-columns: 46px minmax(0, 1fr);
     }
@@ -2348,6 +2367,7 @@ img {
 /* =========================================================
    ANSPRECHPARTNER - GESUCHTE PERSON
    ========================================================= */
+
 .ansprechpartner-gesucht .card {
     border: 2px solid var(--kt-hellblau) !important;
     box-shadow: 0 8px 24px rgba(0, 145, 182, 0.22) !important;
@@ -2366,13 +2386,12 @@ img {
 
 /* =========================================================
    FOOTER
-   Exakt nach Homepage: Hintergrund #f0f1f4, Padding 2rem 4vw
    ========================================================= */
+
 .kt-footer {
     flex-shrink: 0;
     width: 100%;
     margin-top: auto;
-    /* Exakt wie Homepage-Footer: background #f0f1f4 */
     background-color: #f0f1f4;
     border-top: 1px solid #e2e4e8;
 }
@@ -2383,7 +2402,6 @@ img {
     justify-content: space-between;
     gap: 2rem;
     width: 100%;
-    /* Exakt wie Homepage: padding: 2rem 4vw */
     padding: 2rem 4vw;
 }
 
@@ -2520,6 +2538,7 @@ img {
 }
 
 @media (max-width: 991.98px) {
+
     .kt-footer-inner {
         flex-direction: column;
         align-items: center;
@@ -2545,6 +2564,7 @@ img {
 }
 
 @media (max-width: 575.98px) {
+
     .kt-footer-inner {
         padding: 1.5rem 1rem;
     }
@@ -2581,31 +2601,11 @@ img {
 }
 
 /* =========================================================
-   NAVBAR-FIX: Menüpunkte überschneiden sich nicht mehr
+   NAVIGATION - ANPASSUNG FÜR BILDSCHIRME BIS 1400px
    ========================================================= */
 
-/* Padding drastisch reduzieren */
-.nav-box {
-    padding: 0 clamp(0.3rem, 0.8vw, 1rem) !important;
-    font-size: clamp(11px, 1vw, 14px) !important;
-    letter-spacing: -0.01em;
-}
-
-/* Items nicht mehr gleichmäßig strecken, sondern nur so breit wie nötig */
-.main-nav .nav-item {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-}
-
-/* Sicherstellen dass Text nicht umbricht */
-.nav-box {
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-}
-
-/* Tablet-Anpassung */
 @media (max-width: 1400px) {
+
     .nav-box {
         padding: 0 clamp(0.2rem, 0.5vw, 0.7rem) !important;
         font-size: clamp(10px, 0.85vw, 13px) !important;

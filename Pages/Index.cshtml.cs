@@ -3,14 +3,20 @@ using Intranet2.Datenbank.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Intranet2.Services.ActiveDirectory;
 
 namespace Intranet2.Pages
 {
     public class IndexModel : PageModel
     {
         private readonly DataContext _context;
+        private readonly MitarbeiterService _mitarbeiterService;
 
-        public IndexModel(DataContext context) { _context = context; }
+        public IndexModel(DataContext context, MitarbeiterService mitarbeiterService)
+        {
+            _context = context;
+            _mitarbeiterService = mitarbeiterService;
+        }
 
         // GROSSE NEWS
         public List<NewsBeitrag> NewsItems { get; set; } = new();
@@ -52,19 +58,27 @@ namespace Intranet2.Pages
                 return;
             }
 
-            // ERSTELLER DER AKTIVEN UMFRAGE ERMITTELN
+            // VOLLSTÄNDIGEN ERSTELLERNAMEN DER UMFRAGE ERMITTELN
             if (!string.IsNullOrWhiteSpace(AktiveUmfrage.ErstelltVon))
             {
                 string erstellerWindowsBenutzername = AktiveUmfrage.ErstelltVon;
 
-                string? anzeigename = await _context.Benutzer
+                // Ersteller aus der Benutzertabelle laden
+                string? datenbankName = await _context.Benutzer
                     .AsNoTracking()
-                    .Where(b =>
-                        b.WindowsBenutzername == erstellerWindowsBenutzername)
+                    .Where(b => b.WindowsBenutzername == erstellerWindowsBenutzername)
                     .Select(b => b.Name)
                     .FirstOrDefaultAsync();
 
-                UmfrageErstellerName = !string.IsNullOrWhiteSpace(anzeigename) ? anzeigename : erstellerWindowsBenutzername;
+                // Vollständigen Namen aus dem AD ermitteln
+                Mitarbeiter? mitarbeiter = _mitarbeiterService.GetMitarbeiterFuerBenutzername(erstellerWindowsBenutzername);
+
+                // Priorität:
+                // 1. Vollständiger Name aus AD
+                // 2. Name aus Benutzertabelle
+                // 3. Windows-Benutzername
+                UmfrageErstellerName = !string.IsNullOrWhiteSpace(mitarbeiter?.Anzeigename) ? mitarbeiter.Anzeigename 
+                    : !string.IsNullOrWhiteSpace(datenbankName) ? datenbankName : erstellerWindowsBenutzername;
             }
 
             GesamtStimmen = AktiveUmfrage.Optionen.Sum(o => o.Stimmen.Count);

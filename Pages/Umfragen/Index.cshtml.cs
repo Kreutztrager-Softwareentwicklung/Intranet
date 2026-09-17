@@ -2,16 +2,19 @@ using Intranet2.Datenbank.Data;
 using Intranet2.Datenbank.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Intranet2.Services.ActiveDirectory;
 
 namespace Intranet2.Pages.Umfragen
 {
     public class IndexModel : PageModel
     {
         private readonly DataContext _context;
+        private readonly MitarbeiterService _mitarbeiterService;
 
-        public IndexModel(DataContext context)
+        public IndexModel(DataContext context, MitarbeiterService mitarbeiterService)
         {
             _context = context;
+            _mitarbeiterService = mitarbeiterService;
         }
 
         // UMFRAGEN
@@ -75,6 +78,46 @@ namespace Intranet2.Pages.Umfragen
                 b => b.WindowsBenutzername,
                 b => b.Name,
                 StringComparer.OrdinalIgnoreCase);
+
+            // VOLLSTÄNDIGE ERSTELLERNAMEN AUS DEM AD ÜBERNEHMEN
+
+            // Mitarbeiter einmal aus dem AD-Cache laden
+            var adMitarbeiter = _mitarbeiterService.GetMitarbeiter();
+
+            // Nach Windows-Benutzernamen durchsuchbares Dictionary
+            var adNamen = adMitarbeiter
+                .Where(m =>
+                    !string.IsNullOrWhiteSpace(m.SamAccountName) &&
+                    !string.IsNullOrWhiteSpace(m.Anzeigename))
+                .GroupBy(
+                    m => m.SamAccountName,
+                    StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(
+                    gruppe => gruppe.Key,
+                    gruppe => gruppe.First().Anzeigename,
+                    StringComparer.OrdinalIgnoreCase);
+
+
+            // Ersteller sämtlicher Umfragen prüfen
+            foreach (var umfrage in umfragen)
+            {
+                if (string.IsNullOrWhiteSpace(umfrage.ErstelltVon))
+                {
+                    continue;
+                }
+
+                string windowsBenutzername = umfrage.ErstelltVon.Trim();
+
+                // KREUZTRAEGER\mustermann -> mustermann
+                string samAccountName = windowsBenutzername.Split('\\').Last();
+
+                // Falls ein vollständiger AD-Name vorhanden ist:
+                // Datenbank-Anzeigenamen überschreiben
+                if (adNamen.TryGetValue(samAccountName, out string? vollstaendigerName))
+                {
+                    ErstellerNamen[windowsBenutzername] = vollstaendigerName;
+                }
+            }
         }
     }
 }

@@ -37,6 +37,37 @@
         const ergebnisContainer = document.getElementById("mitarbeiterSuchErgebnis");
         const modus             = suchfeld?.dataset.modus ?? "standort";
 
+            // =====================================================
+            // KOMPLETTE MITARBEITERKARTE ANKLICKBAR MACHEN
+            // =====================================================
+
+            ergebnisContainer.addEventListener("click", function (event) {
+
+                // Wenn auf Telefon, Mobil, E-Mail oder den
+                // vorhandenen Button geklickt wurde:
+                // normale Link-Funktion beibehalten.
+                if (event.target.closest("a")) {
+                    return;
+                }
+
+                // Angeklickte Mitarbeiterkarte ermitteln
+                const karte = event.target.closest(".mitarbeiter-suche-person");
+                    if (!karte) {
+                        return;
+                    }
+
+                // Vorhandenen "Zur Person"-Link ermitteln
+                const ziel = karte.querySelector(".mitarbeiter-suche-aktion a[href]");
+
+                if (!ziel) {
+                    return;
+                }
+
+                // Zur Mitarbeiterseite navigieren
+                window.location.assign(ziel.href);
+
+            });
+
         if (!suchfeld || !ergebnisContainer) return;
 
         let debounceTimer = null;

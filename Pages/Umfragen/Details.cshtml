@@ -45,16 +45,32 @@
 
 
                 <!-- =====================================================
-                     ERSTELLER
-                     ===================================================== -->
+                ERSTELLER UND TEAMS-KONTAKT
+                ===================================================== -->
 
-                <div class="poll-detail-ersteller text-muted small mb-3">
+                <div class="poll-detail-ersteller mb-3">
 
-                    Erstellt von:
+                    <div class="d-flex align-items-center flex-wrap gap-3">
+                        <!-- Ersteller -->
+                        <div class="text-muted small">
 
-                    <strong>
-                        @Model.UmfrageErstellerName
-                    </strong>
+                            Erstellt von:
+
+                            <strong>
+                                @Model.UmfrageErstellerName
+                            </strong>
+                        </div>
+
+
+                        <!-- Teams-Nachricht -->
+                        @if (!string.IsNullOrWhiteSpace(Model.UmfrageErstellerTeamsLink))
+                        {
+                            <a href="@Model.UmfrageErstellerTeamsLink" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                                💬 Teams-Nachricht
+                            </a>
+                        }
+
+                    </div>
 
                 </div>
 
