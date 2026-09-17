@@ -1,11 +1,5 @@
 ﻿/* =========================================================
-   KREUTZTRÄGER INTRANET – site.css
-   Header/Navigation 1:1 nach Homepage-Quellcode angepasst
-   Alle anderen Bereiche unverändert übernommen
-   ========================================================= */
-
-/* =========================================================
-   SCHRIFTARTEN – exakt wie auf der Homepage eingebunden
+   1. SCHRIFTARTEN
    ========================================================= */
 
 @font-face {
@@ -29,37 +23,45 @@
     font-style: normal;
 }
 
+
 /* =========================================================
-   1. KREUTZTRÄGER DESIGN-VARIABLEN
+   2. DESIGN-VARIABLEN
    ========================================================= */
 
 :root {
+    /* Unternehmensfarben */
     --kt-hellblau: #0091b6;
     --kt-hellblau-hover: #007a9a;
     --kt-dunkelblau: #273551;
     --kt-rot: #e30613;
     --kt-weiss: #ffffff;
     --kt-grau: #f8f9fa;
+    /* Text und Rahmen */
     --kt-text-muted: #6c757d;
     --kt-border: #dee2e6;
     --kt-border-light: #eef0f2;
+    /* Rundungen */
     --kt-radius-sm: 8px;
     --kt-radius-md: 12px;
     --kt-radius-lg: 14px;
+    /* Schatten */
     --kt-shadow-sm: 0 2px 10px rgba(39, 53, 81, 0.08);
     --kt-shadow-md: 0 4px 12px rgba(39, 53, 81, 0.12);
+    /* Navigation */
     --kt-nav-bg: #f0f1f4;
     --kt-nav-hover-bg: #e7e8ec;
     --kt-nav-text: #242e51;
     --kt-nav-hover-text: #02a0c7;
     --kt-nav-border: #ffffff;
+    /* Topbar */
     --kt-topbar-bg: #ffffff;
     --kt-topbar-padding-v: 2vh;
     --kt-topbar-padding-h: 4vw;
 }
 
+
 /* =========================================================
-   2. GLOBALE BASIS
+   3. GLOBALE BASIS
    ========================================================= */
 
 html {
@@ -107,8 +109,9 @@ img {
     margin-left: auto;
 }
 
+
 /* =========================================================
-   3. BUTTONS UND FORMULARE
+   4. BUTTONS UND FORMULARE
    ========================================================= */
 
 .btn {
@@ -158,9 +161,14 @@ img {
     border-color: var(--kt-hellblau);
 }
 
+
 /* =========================================================
-   4. TOPBAR
+   5. TOPBAR
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Topbar - Grundstruktur
+   --------------------------------------------------------- */
 
 .kt-topbar {
     position: relative;
@@ -179,6 +187,11 @@ img {
     background-color: #ffffff;
     box-sizing: border-box;
 }
+
+
+/* ---------------------------------------------------------
+   Topbar - Logo
+   --------------------------------------------------------- */
 
 .kt-topbar-left {
     display: flex;
@@ -209,6 +222,11 @@ img {
     object-position: left center;
 }
 
+
+/* ---------------------------------------------------------
+   Topbar - Intranet-Titel
+   --------------------------------------------------------- */
+
 .kt-topbar-center {
     display: flex;
     align-items: center;
@@ -234,6 +252,11 @@ img {
     .kt-intranet-title:focus {
         color: #0093be;
     }
+
+
+/* ---------------------------------------------------------
+   Topbar - Benutzerbereich
+   --------------------------------------------------------- */
 
 .kt-topbar-right {
     position: absolute;
@@ -264,9 +287,148 @@ img {
     white-space: nowrap;
 }
 
+
+/* ---------------------------------------------------------
+   Topbar - Tablet bis 1199px
+   --------------------------------------------------------- */
+
+@media (max-width: 1199.98px) {
+
+    .kt-topbar-inner {
+        grid-template-columns: auto 1fr auto;
+        padding: 1.5vh 3vw;
+        column-gap: 1.25rem;
+    }
+
+    .kt-topbar-right {
+        position: static;
+        top: auto;
+        right: auto;
+        bottom: auto;
+    }
+
+    .kt-logo-link {
+        width: 350px;
+        height: 70px;
+    }
+
+    .kt-topbar-logo {
+        width: 350px !important;
+        height: 70px !important;
+        min-width: 350px !important;
+        min-height: 70px !important;
+        max-height: 70px !important;
+    }
+
+    .kt-intranet-title {
+        font-size: 18px;
+    }
+
+    .kt-user-name {
+        font-size: 14px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Topbar - Tablet bis 991px
+   --------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+
+    .kt-topbar-inner {
+        grid-template-columns: auto 1fr auto;
+        padding: 1vh 1.25rem;
+    }
+
+    .kt-topbar-right {
+        position: static;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .kt-logo-link {
+        width: 260px;
+        height: 52px;
+    }
+
+    .kt-topbar-logo {
+        width: 260px !important;
+        height: 52px !important;
+        min-width: 260px !important;
+        min-height: 52px !important;
+        max-height: 52px !important;
+    }
+
+    .kt-user-name {
+        font-size: 13px;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   Topbar - Mobil
+   --------------------------------------------------------- */
+
+@media (max-width: 575.98px) {
+
+    .kt-topbar-inner {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+        gap: 0.5rem 1rem;
+        padding: 0.7rem 1rem;
+    }
+
+    .kt-topbar-left {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .kt-topbar-center {
+        grid-column: 2;
+        grid-row: 1;
+        justify-content: flex-end;
+    }
+
+    .kt-topbar-right {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-content: flex-end;
+    }
+
+    .kt-logo-link {
+        width: 200px;
+        height: 40px;
+    }
+
+    .kt-topbar-logo {
+        width: 200px !important;
+        height: 40px !important;
+        min-width: 200px !important;
+        min-height: 40px !important;
+        max-height: 40px !important;
+    }
+
+    .kt-intranet-title {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    .kt-user-name {
+        font-size: 13px;
+        line-height: 20px;
+    }
+}
+
+
 /* =========================================================
-   5. HAUPTNAVIGATION
+   6. HAUPTNAVIGATION
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Navigation - Grundstruktur
+   --------------------------------------------------------- */
 
 .main-nav {
     position: sticky;
@@ -298,6 +460,11 @@ img {
     border-right: 1px solid #ffffff;
 }
 
+
+/* ---------------------------------------------------------
+   Navigation - Menüpunkte
+   --------------------------------------------------------- */
+
 .main-nav .nav-item {
     display: flex;
     align-items: stretch;
@@ -307,10 +474,6 @@ img {
     padding: 0;
     border-right: 1px solid #ffffff;
 }
-
-/* =========================================================
-   HAUPTMENÜPUNKTE
-   ========================================================= */
 
 .nav-box {
     display: flex;
@@ -337,6 +500,11 @@ img {
     transition: color 0.25s ease-out, background-color 0.25s ease-out;
 }
 
+
+/* ---------------------------------------------------------
+   Navigation - Hover / Aktiv
+   --------------------------------------------------------- */
+
     .nav-box:hover,
     .nav-box:focus,
     .nav-item.dropdown:hover > .nav-box,
@@ -346,6 +514,11 @@ img {
         color: #02a0c7 !important;
         background-color: #e7e8ec;
     }
+
+
+/* ---------------------------------------------------------
+   Navigation - Externe Links
+   --------------------------------------------------------- */
 
 .external-link-icon {
     margin-left: 0.3rem;
@@ -358,9 +531,14 @@ img {
     opacity: 1;
 }
 
+
 /* =========================================================
-   6. DROPDOWNS
+   7. NAVIGATION - DROPDOWNS
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Dropdown - Grundstruktur
+   --------------------------------------------------------- */
 
 .main-nav .nav-item.dropdown {
     position: relative;
@@ -385,11 +563,10 @@ img {
             left: auto;
         }
 
-    .main-nav .nav-item.dropdown:hover > .nav-box,
-    .main-nav .nav-item.dropdown.show > .nav-box {
-        color: #02a0c7 !important;
-        background-color: #e7e8ec;
-    }
+
+/* ---------------------------------------------------------
+   Dropdown - Einträge
+   --------------------------------------------------------- */
 
 .main-nav .dropdown-item {
     display: block;
@@ -416,8 +593,9 @@ img {
     border-color: #d4d6da;
 }
 
+
 /* =========================================================
-   7. VERSCHACHTELTE DROPDOWNS
+   8. NAVIGATION - VERSCHACHTELTE DROPDOWNS
    ========================================================= */
 
 .dropdown-submenu {
@@ -462,8 +640,9 @@ img {
         transform: rotate(135deg);
     }
 
+
 /* =========================================================
-   8. DESKTOP-DROPDOWNS
+   9. NAVIGATION - DESKTOP
    ========================================================= */
 
 @media (min-width: 992px) {
@@ -490,8 +669,9 @@ img {
     }
 }
 
+
 /* =========================================================
-   9. MOBILE NAVIGATION
+   10. NAVIGATION - MOBILE TOGGLER
    ========================================================= */
 
 .navbar-toggler {
@@ -510,45 +690,16 @@ img {
     box-shadow: 0 0 0 0.2rem rgba(0, 147, 190, 0.15);
 }
 
+
 /* =========================================================
-   10. TABLET / MOBILE
+   11. NAVIGATION - RESPONSIVE
    ========================================================= */
 
+/* ---------------------------------------------------------
+   Navigation - Bis 1199px
+   --------------------------------------------------------- */
+
 @media (max-width: 1199.98px) {
-
-    .kt-topbar-inner {
-        grid-template-columns: auto 1fr auto;
-        padding: 1.5vh 3vw;
-        column-gap: 1.25rem;
-    }
-
-    .kt-topbar-right {
-        position: static;
-        top: auto;
-        right: auto;
-        bottom: auto;
-    }
-
-    .kt-logo-link {
-        width: 350px;
-        height: 70px;
-    }
-
-    .kt-topbar-logo {
-        width: 350px !important;
-        height: 70px !important;
-        min-width: 350px !important;
-        min-height: 70px !important;
-        max-height: 70px !important;
-    }
-
-    .kt-intranet-title {
-        font-size: 18px;
-    }
-
-    .kt-user-name {
-        font-size: 14px;
-    }
 
     .nav-box {
         padding: 0 clamp(0.3rem, 0.8vw, 1rem);
@@ -557,36 +708,12 @@ img {
     }
 }
 
+
+/* ---------------------------------------------------------
+   Navigation - Bis 991px
+   --------------------------------------------------------- */
+
 @media (max-width: 991.98px) {
-
-    .kt-topbar-inner {
-        grid-template-columns: auto 1fr auto;
-        padding: 1vh 1.25rem;
-    }
-
-    .kt-topbar-right {
-        position: static;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-    }
-
-    .kt-logo-link {
-        width: 260px;
-        height: 52px;
-    }
-
-    .kt-topbar-logo {
-        width: 260px !important;
-        height: 52px !important;
-        min-width: 260px !important;
-        min-height: 52px !important;
-        max-height: 52px !important;
-    }
-
-    .kt-user-name {
-        font-size: 13px;
-    }
 
     .main-nav {
         position: relative;
@@ -663,62 +790,22 @@ img {
     }
 }
 
-/* =========================================================
-   11. KLEINE BILDSCHIRME
-   ========================================================= */
 
-@media (max-width: 575.98px) {
+/* ---------------------------------------------------------
+   Navigation - Feinanpassung bis 1400px
+   --------------------------------------------------------- */
 
-    .kt-topbar-inner {
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto;
-        gap: 0.5rem 1rem;
-        padding: 0.7rem 1rem;
-    }
+@media (max-width: 1400px) {
 
-    .kt-topbar-left {
-        grid-column: 1;
-        grid-row: 1;
-    }
-
-    .kt-topbar-center {
-        grid-column: 2;
-        grid-row: 1;
-        justify-content: flex-end;
-    }
-
-    .kt-topbar-right {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        justify-content: flex-end;
-    }
-
-    .kt-logo-link {
-        width: 200px;
-        height: 40px;
-    }
-
-    .kt-topbar-logo {
-        width: 200px !important;
-        height: 40px !important;
-        min-width: 200px !important;
-        min-height: 40px !important;
-        max-height: 40px !important;
-    }
-
-    .kt-intranet-title {
-        font-size: 16px;
-        line-height: 22px;
-    }
-
-    .kt-user-name {
-        font-size: 13px;
-        line-height: 20px;
+    .nav-box {
+        padding: 0 clamp(0.2rem, 0.5vw, 0.7rem) !important;
+        font-size: clamp(10px, 0.85vw, 13px) !important;
     }
 }
 
+
 /* =========================================================
-   12. ACCESSIBILITY
+   12. NAVIGATION - BARRIEREFREIHEIT
    ========================================================= */
 
 .nav-box:focus-visible,
@@ -728,14 +815,24 @@ img {
     outline-offset: -2px;
 }
 
+
 /* =========================================================
-   15. JOBS / STELLENANGEBOTE
+   13. JOBS / STELLENANGEBOTE
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Jobs - Seite
+   --------------------------------------------------------- */
 
 .jobs-page {
     padding-top: 1rem;
     padding-bottom: 3rem;
 }
+
+
+/* ---------------------------------------------------------
+   Jobs - Hero
+   --------------------------------------------------------- */
 
 .jobs-hero {
     position: relative;
@@ -792,6 +889,11 @@ img {
     font-size: 1.05rem;
 }
 
+
+/* ---------------------------------------------------------
+   Jobs - Zusammenfassung
+   --------------------------------------------------------- */
+
 .jobs-summary {
     display: flex;
     gap: 2.5rem;
@@ -811,6 +913,11 @@ img {
         color: rgba(255, 255, 255, 0.7);
         font-size: 0.9rem;
     }
+
+
+/* ---------------------------------------------------------
+   Jobs - Suche und Filter
+   --------------------------------------------------------- */
 
 .jobs-toolbar {
     padding: 1.5rem;
@@ -846,6 +953,11 @@ img {
     background: rgba(0, 145, 182, 0.1);
     border-radius: 20px;
 }
+
+
+/* ---------------------------------------------------------
+   Jobs - Stellenkarten
+   --------------------------------------------------------- */
 
 .job-card {
     display: flex;
@@ -934,6 +1046,11 @@ img {
         transform: translateX(4px);
     }
 
+
+/* ---------------------------------------------------------
+   Jobs - Keine Ergebnisse
+   --------------------------------------------------------- */
+
 .jobs-empty {
     margin-top: 1rem;
     padding: 3rem;
@@ -946,6 +1063,11 @@ img {
     .jobs-empty h3 {
         color: var(--kt-dunkelblau);
     }
+
+
+/* ---------------------------------------------------------
+   Jobs - Kontakt
+   --------------------------------------------------------- */
 
 .jobs-contact {
     display: flex;
@@ -974,6 +1096,11 @@ img {
     white-space: nowrap;
 }
 
+
+/* ---------------------------------------------------------
+   Jobs - Responsive
+   --------------------------------------------------------- */
+
 @media (max-width: 767.98px) {
 
     .jobs-hero {
@@ -995,9 +1122,14 @@ img {
     }
 }
 
+
 /* =========================================================
-   16. STARTSEITE
+   14. STARTSEITE
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Startseite - Grundstruktur
+   --------------------------------------------------------- */
 
 .home-page {
     padding-top: 2rem;
@@ -1011,6 +1143,11 @@ img {
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
+
+
+/* ---------------------------------------------------------
+   Startseite - News
+   --------------------------------------------------------- */
 
 .home-news-card,
 .home-side-feed {
@@ -1074,6 +1211,11 @@ img {
         color: var(--kt-hellblau-hover);
     }
 
+
+/* ---------------------------------------------------------
+   Startseite - Feed
+   --------------------------------------------------------- */
+
 .home-side-feed-header {
     padding: 1rem 1.2rem;
     color: var(--kt-weiss);
@@ -1135,6 +1277,11 @@ img {
     text-align: center;
 }
 
+
+/* ---------------------------------------------------------
+   Startseite - Responsive
+   --------------------------------------------------------- */
+
 @media (max-width: 767.98px) {
 
     .home-section-header {
@@ -1155,9 +1302,14 @@ img {
     }
 }
 
+
 /* =========================================================
-   17. UMFRAGEN / STARTSEITEN-FEED
+   15. STARTSEITE - UMFRAGEN / FEED
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Umfrage - Grundstruktur
+   --------------------------------------------------------- */
 
 .home-poll {
     padding: 1.2rem;
@@ -1192,6 +1344,33 @@ img {
     line-height: 1.45;
 }
 
+
+/* ---------------------------------------------------------
+   Umfrage - Anklickbarer Titel
+   --------------------------------------------------------- */
+
+.home-poll-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    .home-poll-link:hover,
+    .home-poll-link:focus {
+        color: var(--kt-hellblau);
+        text-decoration: underline;
+    }
+
+    .home-poll-link:focus-visible {
+        outline: 2px solid var(--kt-hellblau);
+        outline-offset: 3px;
+    }
+
+
+/* ---------------------------------------------------------
+   Umfrage - Antwortmöglichkeiten
+   --------------------------------------------------------- */
+
 .home-poll-options {
     display: flex;
     flex-direction: column;
@@ -1220,6 +1399,11 @@ img {
         flex-shrink: 0;
         accent-color: var(--kt-hellblau);
     }
+
+
+/* ---------------------------------------------------------
+   Umfrage - Ergebnisse
+   --------------------------------------------------------- */
 
 .home-poll-results {
     margin-top: 1rem;
@@ -1264,6 +1448,11 @@ img {
     text-align: right;
 }
 
+
+/* ---------------------------------------------------------
+   Umfrage - Meldungen
+   --------------------------------------------------------- */
+
 .home-poll-message {
     padding: 0.7rem 1rem;
     color: var(--kt-dunkelblau);
@@ -1283,30 +1472,14 @@ img {
     letter-spacing: 0.04rem;
 }
 
-/* =========================================================
-   STARTSEITE - ANKLICKBARE UMFRAGE
-   ========================================================= */
-
-.home-poll-link {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-    .home-poll-link:hover,
-    .home-poll-link:focus {
-        color: var(--kt-hellblau);
-        text-decoration: underline;
-    }
-
-    .home-poll-link:focus-visible {
-        outline: 2px solid var(--kt-hellblau);
-        outline-offset: 3px;
-    }
 
 /* =========================================================
-   18. UMFRAGEN - ÜBERSICHT UND DETAILSEITE
+   16. UMFRAGEN - ÜBERSICHT
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Umfragen - Karten
+   --------------------------------------------------------- */
 
 .poll-card {
     overflow: hidden;
@@ -1352,6 +1525,31 @@ img {
     font-size: 0.88rem;
 }
 
+
+/* ---------------------------------------------------------
+   Umfragen - Ersteller
+   --------------------------------------------------------- */
+
+.poll-card-ersteller {
+    margin-top: 0.35rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+    .poll-card-ersteller strong {
+        color: var(--kt-dunkelblau);
+        font-weight: 600;
+    }
+
+
+/* =========================================================
+   17. UMFRAGEN - DETAILSEITE
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Detailseite - Grundstruktur
+   --------------------------------------------------------- */
+
 .poll-detail-card {
     padding: 2rem;
     background: var(--kt-weiss);
@@ -1372,6 +1570,26 @@ img {
     font-size: 1.05rem;
     line-height: 1.6;
 }
+
+
+/* ---------------------------------------------------------
+   Detailseite - Ersteller
+   --------------------------------------------------------- */
+
+.poll-detail-ersteller {
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+}
+
+    .poll-detail-ersteller strong {
+        color: var(--kt-dunkelblau);
+        font-weight: 600;
+    }
+
+
+/* ---------------------------------------------------------
+   Detailseite - Antwortmöglichkeiten
+   --------------------------------------------------------- */
 
 .poll-detail-options {
     display: flex;
@@ -1399,6 +1617,11 @@ img {
     .poll-detail-option input {
         accent-color: var(--kt-hellblau);
     }
+
+
+/* ---------------------------------------------------------
+   Detailseite - Ergebnisse
+   --------------------------------------------------------- */
 
 .poll-detail-result {
     margin-bottom: 1.4rem;
@@ -1445,6 +1668,11 @@ img {
     text-align: right;
 }
 
+
+/* ---------------------------------------------------------
+   Umfragen - Responsive
+   --------------------------------------------------------- */
+
 @media (max-width: 767.98px) {
 
     .poll-detail-card {
@@ -1461,38 +1689,14 @@ img {
     }
 }
 
-/* =========================================================
-   UMFRAGEN - ERSTELLER
-   ========================================================= */
-
-.poll-card-ersteller {
-    margin-top: 0.35rem;
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
-}
-
-    .poll-card-ersteller strong {
-        color: var(--kt-dunkelblau);
-        font-weight: 600;
-    }
 
 /* =========================================================
-   UMFRAGE-DETAILS - ERSTELLER
+   18. MARKTPLATZ
    ========================================================= */
 
-.poll-detail-ersteller {
-    margin-top: 0.35rem;
-    font-size: 0.9rem;
-}
-
-    .poll-detail-ersteller strong {
-        color: var(--kt-dunkelblau);
-        font-weight: 600;
-    }
-
-/* =========================================================
-   19. MARKTPLATZ
-   ========================================================= */
+/* ---------------------------------------------------------
+   Marktplatz - Navigations-Badge
+   --------------------------------------------------------- */
 
 .marketplace-nav-badge {
     display: inline-flex;
@@ -1509,6 +1713,11 @@ img {
     font-weight: 700;
     line-height: 1;
 }
+
+
+/* ---------------------------------------------------------
+   Marktplatz - Übersicht
+   --------------------------------------------------------- */
 
 .marketplace-header {
     display: flex;
@@ -1536,6 +1745,11 @@ img {
         box-shadow: 0 10px 25px rgba(39, 53, 81, 0.12);
     }
 
+
+/* ---------------------------------------------------------
+   Marktplatz - Bilder
+   --------------------------------------------------------- */
+
 .marketplace-card-image-link {
     display: block;
 }
@@ -1557,6 +1771,11 @@ img {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
+
+/* ---------------------------------------------------------
+   Marktplatz - Karteninhalt
+   --------------------------------------------------------- */
 
 .marketplace-card-body {
     display: flex;
@@ -1626,6 +1845,11 @@ img {
         text-decoration: none;
     }
 
+
+/* ---------------------------------------------------------
+   Marktplatz - Leere Übersicht
+   --------------------------------------------------------- */
+
 .marketplace-empty {
     padding: 4rem 2rem;
     text-align: center;
@@ -1634,6 +1858,11 @@ img {
     border-radius: var(--kt-radius-md);
 }
 
+
+/* ---------------------------------------------------------
+   Marktplatz - Formular
+   --------------------------------------------------------- */
+
 .marketplace-form-card {
     padding: 2rem;
     background: var(--kt-weiss);
@@ -1641,6 +1870,11 @@ img {
     border-radius: var(--kt-radius-md);
     box-shadow: var(--kt-shadow-sm);
 }
+
+
+/* ---------------------------------------------------------
+   Marktplatz - Detailseite
+   --------------------------------------------------------- */
 
 .marketplace-detail {
     overflow: hidden;
@@ -1693,6 +1927,11 @@ img {
     white-space: pre-line;
 }
 
+
+/* ---------------------------------------------------------
+   Marktplatz - Verfasser
+   --------------------------------------------------------- */
+
 .marketplace-author {
     display: flex;
     align-items: center;
@@ -1704,6 +1943,11 @@ img {
         display: flex;
         flex-direction: column;
     }
+
+
+/* ---------------------------------------------------------
+   Marktplatz - Responsive
+   --------------------------------------------------------- */
 
 @media (max-width: 767.98px) {
 
@@ -1727,9 +1971,14 @@ img {
     }
 }
 
+
 /* =========================================================
-   20. MEIN PROFIL
+   19. MEIN PROFIL
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Profil - Karte
+   --------------------------------------------------------- */
 
 .profile-card {
     overflow: hidden;
@@ -1738,6 +1987,11 @@ img {
     border-radius: var(--kt-radius-md);
     box-shadow: var(--kt-shadow-sm);
 }
+
+
+/* ---------------------------------------------------------
+   Profil - Datenzeilen
+   --------------------------------------------------------- */
 
 .profile-row {
     display: grid;
@@ -1771,6 +2025,11 @@ img {
             color: var(--kt-hellblau-hover);
         }
 
+
+/* ---------------------------------------------------------
+   Profil - Responsive
+   --------------------------------------------------------- */
+
 @media (max-width: 575.98px) {
 
     .profile-row {
@@ -1779,13 +2038,23 @@ img {
     }
 }
 
+
 /* =========================================================
-   21. DOKUMENTE
+   20. DOKUMENTE
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Dokumente - Grundstruktur
+   --------------------------------------------------------- */
 
 .dokumente-page {
     max-width: 1100px;
 }
+
+
+/* ---------------------------------------------------------
+   Dokumente - Accordion
+   --------------------------------------------------------- */
 
 .dokumente-accordion {
     display: flex;
@@ -1824,6 +2093,11 @@ img {
         filter: brightness(0) invert(1);
     }
 
+
+/* ---------------------------------------------------------
+   Dokumente - Inhalt
+   --------------------------------------------------------- */
+
 .dokumente-accordion-body {
     padding: 1.5rem;
 }
@@ -1856,6 +2130,11 @@ img {
         word-break: break-word;
     }
 
+
+/* ---------------------------------------------------------
+   Dokumente - Highlights
+   --------------------------------------------------------- */
+
 .dokumente-highlights {
     display: flex;
     flex-direction: column;
@@ -1885,6 +2164,11 @@ img {
         font-size: 0.85rem;
     }
 
+
+/* ---------------------------------------------------------
+   Dokumente - Responsive
+   --------------------------------------------------------- */
+
 @media (max-width: 575.98px) {
 
     .dokumente-accordion .accordion-button {
@@ -1897,9 +2181,14 @@ img {
     }
 }
 
+
 /* =========================================================
-   BEAUFTRAGTE / ERSTHELFER KARTEN
+   21. BEAUFTRAGTE UND ERSTHELFER
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Karten - Grundstruktur
+   --------------------------------------------------------- */
 
 .beauftragten-card,
 .ersthelfer-card {
@@ -1920,6 +2209,11 @@ img {
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
     }
 
+
+/* ---------------------------------------------------------
+   Karten - Badge
+   --------------------------------------------------------- */
+
 .beauftragten-badge {
     display: inline-block;
     margin-bottom: 1rem;
@@ -1931,6 +2225,11 @@ img {
     font-weight: 600;
     line-height: 1;
 }
+
+
+/* ---------------------------------------------------------
+   Karten - Mitarbeiterfoto
+   --------------------------------------------------------- */
 
 .beauftragten-bild-wrap {
     display: flex;
@@ -1964,6 +2263,11 @@ img {
     font-weight: 700;
 }
 
+
+/* ---------------------------------------------------------
+   Karten - Personeninformationen
+   --------------------------------------------------------- */
+
 .beauftragten-body {
     text-align: center;
 }
@@ -1980,6 +2284,11 @@ img {
     font-size: 1.45rem;
     font-weight: 700;
 }
+
+
+/* ---------------------------------------------------------
+   Karten - Kontaktdaten
+   --------------------------------------------------------- */
 
 .beauftragten-kontaktliste {
     margin-top: 0.75rem;
@@ -2009,14 +2318,29 @@ img {
         text-decoration: underline;
     }
 
+
+/* ---------------------------------------------------------
+   Karten - Aktionen
+   --------------------------------------------------------- */
+
 .beauftragten-actions {
     margin-top: 1rem;
     text-align: center;
 }
 
+
+/* ---------------------------------------------------------
+   Ersthelfer - Accordion
+   --------------------------------------------------------- */
+
 .ersthelfer-accordion .accordion-body {
     padding-top: 1.25rem;
 }
+
+
+/* ---------------------------------------------------------
+   Karten - Responsive
+   --------------------------------------------------------- */
 
 @media (max-width: 767.98px) {
 
@@ -2030,9 +2354,14 @@ img {
     }
 }
 
+
 /* =========================================================
-   ANSPRECHPARTNER - ABTEILUNGEN / UNTERABTEILUNGEN
+   22. ANSPRECHPARTNER - ABTEILUNGEN
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Abteilungen - Grundstruktur
+   --------------------------------------------------------- */
 
 .abteilungen-container {
     width: 100%;
@@ -2067,6 +2396,11 @@ img {
     color: var(--kt-text-muted);
     font-size: 1rem;
 }
+
+
+/* ---------------------------------------------------------
+   Abteilungen - Liste
+   --------------------------------------------------------- */
 
 .abteilungen-list {
     overflow: hidden;
@@ -2104,6 +2438,11 @@ img {
     font-weight: 700;
 }
 
+
+/* ---------------------------------------------------------
+   Abteilungen - Mitarbeiteranzahl
+   --------------------------------------------------------- */
+
 .abteilung-info {
     display: flex;
     align-items: center;
@@ -2121,6 +2460,11 @@ img {
     color: var(--kt-hellblau);
 }
 
+
+/* ---------------------------------------------------------
+   Abteilungen - Pfeil
+   --------------------------------------------------------- */
+
 .abteilung-arrow {
     color: var(--kt-hellblau);
     font-size: 1.25rem;
@@ -2132,6 +2476,11 @@ img {
     transform: translateX(4px);
 }
 
+
+/* ---------------------------------------------------------
+   Abteilungen - Übergeordnete Abteilung
+   --------------------------------------------------------- */
+
 .ansprechpartner-parent-label {
     margin-bottom: 0.25rem;
     color: var(--kt-hellblau);
@@ -2140,6 +2489,11 @@ img {
     text-transform: uppercase;
     letter-spacing: 0.03rem;
 }
+
+
+/* ---------------------------------------------------------
+   Abteilungen - Responsive
+   --------------------------------------------------------- */
 
 @media (max-width: 575.98px) {
 
@@ -2167,9 +2521,14 @@ img {
     }
 }
 
+
 /* =========================================================
-   ANSPRECHPARTNER - MITARBEITERSUCHE
+   23. ANSPRECHPARTNER - MITARBEITERSUCHE
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Grundstruktur
+   --------------------------------------------------------- */
 
 .mitarbeiter-suche {
     position: relative;
@@ -2199,6 +2558,11 @@ img {
     font-size: 0.85rem;
 }
 
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Eingabefeld
+   --------------------------------------------------------- */
+
 .mitarbeiter-suche-input-wrapper {
     position: relative;
 }
@@ -2219,6 +2583,11 @@ img {
     border: 1px solid var(--kt-border);
     border-radius: var(--kt-radius-sm);
 }
+
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Ergebniscontainer
+   --------------------------------------------------------- */
 
 .mitarbeiter-suche-ergebnisse {
     position: absolute;
@@ -2242,6 +2611,11 @@ img {
         border-bottom: none;
     }
 
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Anklickbarer Mitarbeiter
+   --------------------------------------------------------- */
+
 .mitarbeiter-suche-person {
     position: relative;
     display: grid;
@@ -2258,6 +2632,11 @@ img {
         background-color: var(--kt-grau);
     }
 
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Avatar
+   --------------------------------------------------------- */
+
 .mitarbeiter-suche-avatar {
     display: flex;
     align-items: center;
@@ -2271,6 +2650,11 @@ img {
     font-size: 1.1rem;
     font-weight: 700;
 }
+
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Informationen
+   --------------------------------------------------------- */
 
 .mitarbeiter-suche-person-info {
     min-width: 0;
@@ -2302,6 +2686,11 @@ img {
     font-size: 0.8rem;
 }
 
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Leitungskennzeichnung
+   --------------------------------------------------------- */
+
 .mitarbeiter-suche-leitung {
     padding: 0.15rem 0.45rem;
     color: var(--kt-hellblau);
@@ -2310,6 +2699,11 @@ img {
     font-size: 0.7rem;
     font-weight: 700;
 }
+
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Kontaktdaten
+   --------------------------------------------------------- */
 
 .mitarbeiter-suche-kontakt {
     display: flex;
@@ -2332,15 +2726,30 @@ img {
         text-decoration: underline;
     }
 
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Zur Person
+   --------------------------------------------------------- */
+
 .mitarbeiter-suche-aktion {
     flex-shrink: 0;
 }
+
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Keine Ergebnisse
+   --------------------------------------------------------- */
 
 .mitarbeiter-suche-leer {
     padding: 1.5rem;
     color: var(--kt-text-muted);
     text-align: center;
 }
+
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche - Responsive
+   --------------------------------------------------------- */
 
 @media (max-width: 767.98px) {
 
@@ -2364,8 +2773,9 @@ img {
     }
 }
 
+
 /* =========================================================
-   ANSPRECHPARTNER - GESUCHTE PERSON
+   24. ANSPRECHPARTNER - GESUCHTE PERSON
    ========================================================= */
 
 .ansprechpartner-gesucht .card {
@@ -2384,9 +2794,14 @@ img {
         text-align: center;
     }
 
+
 /* =========================================================
-   FOOTER
+   25. FOOTER
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Footer - Grundstruktur
+   --------------------------------------------------------- */
 
 .kt-footer {
     flex-shrink: 0;
@@ -2404,6 +2819,11 @@ img {
     width: 100%;
     padding: 2rem 4vw;
 }
+
+
+/* ---------------------------------------------------------
+   Footer - Links links
+   --------------------------------------------------------- */
 
 .kt-footer-links {
     display: flex;
@@ -2428,6 +2848,11 @@ img {
         text-decoration: none;
     }
 
+
+/* ---------------------------------------------------------
+   Footer - Rechter Bereich
+   --------------------------------------------------------- */
+
 .kt-footer-right {
     display: flex;
     align-items: center;
@@ -2435,6 +2860,11 @@ img {
     gap: 2rem;
     flex-shrink: 0;
 }
+
+
+/* ---------------------------------------------------------
+   Footer - IT-Kontakt
+   --------------------------------------------------------- */
 
 .kt-footer-it {
     display: flex;
@@ -2471,6 +2901,11 @@ img {
         box-shadow: 0 4px 10px rgba(39, 53, 81, 0.12);
     }
 
+
+/* ---------------------------------------------------------
+   Footer - Social Media
+   --------------------------------------------------------- */
+
 .kt-footer-social {
     display: flex;
     align-items: center;
@@ -2499,6 +2934,11 @@ img {
         transform: translateY(-2px);
     }
 
+
+/* ---------------------------------------------------------
+   Footer - Social-Media-Icons
+   --------------------------------------------------------- */
+
 .kt-social-icon {
     display: inline-flex;
     align-items: center;
@@ -2517,6 +2957,11 @@ img {
     font-size: 1rem;
 }
 
+
+/* ---------------------------------------------------------
+   Footer - Untere Zeile
+   --------------------------------------------------------- */
+
 .kt-footer-bottom {
     display: flex;
     align-items: center;
@@ -2530,12 +2975,22 @@ img {
     font-size: 0.78rem;
 }
 
+
+/* ---------------------------------------------------------
+   Footer - Barrierefreiheit
+   --------------------------------------------------------- */
+
 .kt-footer-link:focus-visible,
 .kt-footer-social-link:focus-visible,
 .kt-footer-it-button:focus-visible {
     outline: 2px solid var(--kt-hellblau);
     outline-offset: 3px;
 }
+
+
+/* ---------------------------------------------------------
+   Footer - Tablet
+   --------------------------------------------------------- */
 
 @media (max-width: 991.98px) {
 
@@ -2562,6 +3017,11 @@ img {
         justify-content: center;
     }
 }
+
+
+/* ---------------------------------------------------------
+   Footer - Mobil
+   --------------------------------------------------------- */
 
 @media (max-width: 575.98px) {
 
@@ -2597,17 +3057,5 @@ img {
         gap: 0.35rem;
         padding: 0.85rem 1rem;
         text-align: center;
-    }
-}
-
-/* =========================================================
-   NAVIGATION - ANPASSUNG FÜR BILDSCHIRME BIS 1400px
-   ========================================================= */
-
-@media (max-width: 1400px) {
-
-    .nav-box {
-        padding: 0 clamp(0.2rem, 0.5vw, 0.7rem) !important;
-        font-size: clamp(10px, 0.85vw, 13px) !important;
     }
 }

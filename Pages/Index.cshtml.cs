@@ -21,11 +21,23 @@ namespace Intranet2.Pages
         // GROSSE NEWS
         public List<NewsBeitrag> NewsItems { get; set; } = new();
 
-        // KURZMELDUNGEN
-        public List<NewsBeitrag> Kurzmeldungen { get; set; } = new();
+        // GEMEINSAMER STARTSEITEN-FEED
+        public List<StartseitenFeedEintrag> FeedEintraege { get; set; } = new();
 
-        // UMFRAGE
-        public Umfrage? AktiveUmfrage { get; set; }
+        public class StartseitenFeedEintrag
+        {
+            public NewsBeitrag? Kurzmeldung { get; set; }
+
+            public Umfrage? Umfrage { get; set; }
+
+            public DateTime Zeitpunkt { get; set; }
+
+            public string ErstellerName { get; set; } = "Nicht hinterlegt";
+
+            public int GesamtStimmen { get; set; }
+
+            public int? EigeneOptionId { get; set; }
+        }
 
         public string UmfrageErstellerName { get; set; } = "Nicht hinterlegt";
 
@@ -39,60 +51,128 @@ namespace Intranet2.Pages
         // SEITE LADEN
         public async Task OnGetAsync()
         {
-            DateTime jetzt = DateTime.UtcNow;
+            DateTime jetzt = DateTime.Now;
 
             // GROSSE NEWS
             NewsItems = await _context.NewsBeitraege.AsNoTracking().Where(n => n.IstVeroeffentlicht).Where(n => n.VeroeffentlichtAm <= jetzt).Where(n => !n.IstKurzmeldung)
                 .OrderByDescending(n => n.VeroeffentlichtAm).Take(3).ToListAsync();
 
-            // KURZMELDUNGEN
-            Kurzmeldungen = await _context.NewsBeitraege.AsNoTracking().Where(n => n.IstVeroeffentlicht).Where(n => n.VeroeffentlichtAm <= jetzt)
-                .Where(n => n.IstKurzmeldung).OrderByDescending(n => n.VeroeffentlichtAm).Take(5).ToListAsync();
+            // 1. DIE DREI NEUESTEN KURZMELDUNGEN LADEN
+            var kurzmeldungen = await _context.NewsBeitraege
+                .AsNoTracking()
+                .Where(n => n.IstVeroeffentlicht)
+                .Where(n => n.IstKurzmeldung)
+                .Where(n => n.VeroeffentlichtAm <= jetzt)
+                .OrderByDescending(n => n.VeroeffentlichtAm)
+                .ThenByDescending(n => n.Id)
+                .Take(3)
+                .ToListAsync();
 
-            // AKTIVE UMFRAGE
-            AktiveUmfrage = await _context.Umfragen.AsNoTracking().Include(u => u.Optionen).ThenInclude(o => o.Stimmen).Where(u => u.IstAktiv)
-                .Where(u => u.StartetAm <= jetzt).Where(u => !u.EndetAm.HasValue || u.EndetAm.Value >= jetzt).OrderByDescending(u => u.StartetAm).FirstOrDefaultAsync();
+            // 2. DIE DREI NEUESTEN LAUFENDEN UMFRAGEN LADEN
+            var umfragen = await _context.Umfragen
+                .AsNoTracking()
+                .Where(u => u.IstAktiv)
+                .Where(u => u.StartetAm <= jetzt)
+                .Where(u => !u.EndetAm.HasValue || u.EndetAm.Value >= jetzt)
+                .OrderByDescending(u => u.ErstelltAm)
+                .ThenByDescending(u => u.Id)
+                .Take(3)
+                .Include(u => u.Optionen).ThenInclude(o => o.Stimmen)
+                .ToListAsync();
 
-            if (AktiveUmfrage == null)
+            // 3. KURZMELDUNGEN IN DEN FEED ÜBERNEHMEN
+            var feed = new List<StartseitenFeedEintrag>();
+
+            foreach (var meldung in kurzmeldungen)
             {
-                return;
+                feed.Add(new StartseitenFeedEintrag
+                {
+                    Kurzmeldung = meldung,
+
+                    Zeitpunkt = meldung.VeroeffentlichtAm
+                });
             }
 
-            // VOLLSTÄNDIGEN ERSTELLERNAMEN DER UMFRAGE ERMITTELN
-            if (!string.IsNullOrWhiteSpace(AktiveUmfrage.ErstelltVon))
+            // 4. UMFRAGEN IN DEN FEED ÜBERNEHMEN
+            foreach (var umfrage in umfragen)
             {
-                string erstellerWindowsBenutzername = AktiveUmfrage.ErstelltVon;
+                feed.Add(new StartseitenFeedEintrag
+                {
+                    Umfrage = umfrage,
 
-                // Ersteller aus der Benutzertabelle laden
-                string? datenbankName = await _context.Benutzer
-                    .AsNoTracking()
-                    .Where(b => b.WindowsBenutzername == erstellerWindowsBenutzername)
-                    .Select(b => b.Name)
-                    .FirstOrDefaultAsync();
-
-                // Vollständigen Namen aus dem AD ermitteln
-                Mitarbeiter? mitarbeiter = _mitarbeiterService.GetMitarbeiterFuerBenutzername(erstellerWindowsBenutzername);
-
-                // Priorität:
-                // 1. Vollständiger Name aus AD
-                // 2. Name aus Benutzertabelle
-                // 3. Windows-Benutzername
-                UmfrageErstellerName = !string.IsNullOrWhiteSpace(mitarbeiter?.Anzeigename) ? mitarbeiter.Anzeigename 
-                    : !string.IsNullOrWhiteSpace(datenbankName) ? datenbankName : erstellerWindowsBenutzername;
+                    Zeitpunkt = umfrage.ErstelltAm
+                });
             }
 
-            GesamtStimmen = AktiveUmfrage.Optionen.Sum(o => o.Stimmen.Count);
+            // 5. GEMEINSAM SORTIEREN UND AUF DREI BEGRENZEN
+            FeedEintraege = feed
+                .OrderByDescending(e => e.Zeitpunkt)
+                .ThenByDescending(e => e.Umfrage?.Id ?? e.Kurzmeldung?.Id ?? 0)
+                .Take(3)
+                .ToList();
 
+            // 6. ERSTELLER DER ANGEZEIGTEN UMFRAGEN LADEN
+            var erstellerBenutzernamen = FeedEintraege
+                .Where(e => e.Umfrage != null)
+                .Select(e => e.Umfrage!.ErstelltVon)
+                .Where(name => !string.IsNullOrWhiteSpace(name))
+                .Select(name => name!)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            // Benutzer aus der Datenbank gemeinsam laden
+            var benutzer = await _context.Benutzer
+                .AsNoTracking()
+                .Where(b => erstellerBenutzernamen.Contains(b.WindowsBenutzername))
+                .Select(b => new
+                {
+                    b.WindowsBenutzername,
+                    b.Name
+                })
+                .ToListAsync();
+
+            // 7. ERSTELLERNAMEN UND ABSTIMMUNGEN ZUORDNEN
             string? windowsBenutzername = User.Identity?.Name;
 
-            if (string.IsNullOrWhiteSpace(windowsBenutzername))
+            foreach (var eintrag in FeedEintraege)
             {
-                return;
+                if (eintrag.Umfrage == null)
+                {
+                    continue;
+                }
+
+                var umfrage = eintrag.Umfrage;
+
+                // Vollständigen Erstellernamen ermitteln
+                if (!string.IsNullOrWhiteSpace(umfrage.ErstelltVon))
+                {
+                    string erstellerWindowsBenutzername = umfrage.ErstelltVon;
+
+                    var datenbankBenutzer = benutzer.FirstOrDefault(b => string.Equals(b.WindowsBenutzername, erstellerWindowsBenutzername, StringComparison.OrdinalIgnoreCase));
+
+                    // Name bevorzugt aus Active Directory laden
+                    var mitarbeiter = _mitarbeiterService.GetMitarbeiterFuerBenutzername(erstellerWindowsBenutzername);
+
+                    eintrag.ErstellerName = !string.IsNullOrWhiteSpace(mitarbeiter?.Anzeigename) ? mitarbeiter.Anzeigename 
+                        : !string.IsNullOrWhiteSpace(datenbankBenutzer?.Name) ? datenbankBenutzer.Name : erstellerWindowsBenutzername;
+                }
+
+                // Gesamtstimmen berechnen
+                eintrag.GesamtStimmen = umfrage.Optionen.Sum(o => o.Stimmen.Count);
+
+                // Eigene Abstimmung des angemeldeten Benutzers
+                if (string.IsNullOrWhiteSpace(windowsBenutzername))
+                {
+                    continue;
+                }
+
+                var eigeneStimme = umfrage.Optionen
+                    .SelectMany(o => o.Stimmen)
+                    .FirstOrDefault(s => string.Equals(s.WindowsBenutzername, windowsBenutzername, StringComparison.OrdinalIgnoreCase));
+
+
+                eintrag.EigeneOptionId = eigeneStimme?.UmfrageOptionId;
             }
-
-            UmfrageStimme? eigeneStimme = AktiveUmfrage.Optionen.SelectMany(o => o.Stimmen).FirstOrDefault(s => string.Equals(s.WindowsBenutzername, windowsBenutzername, StringComparison.OrdinalIgnoreCase));
-
-            EigeneOptionId = eigeneStimme ?.UmfrageOptionId;
         }
 
         // ABSTIMMEN

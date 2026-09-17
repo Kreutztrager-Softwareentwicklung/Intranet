@@ -80,11 +80,8 @@
         </div>
 
         <!-- RECHTE SEITE: KLEINER FEED -->
-
         <div class="col-xl-4 col-lg-4">
-
             <div class="home-side-feed">
-
                 <div class="home-side-feed-header">
                     <div>
                         <h2 class="h5 mb-1">
@@ -97,8 +94,9 @@
                     </div>
                 </div>
 
+                <!-- GEMEINSAMER FEED - KURZMELDUNGEN UND UMFRAGEN -->
                 <div class="home-side-feed-body">
-                    <!-- MELDUNG -->
+                    <!-- MELDUNG NACH EINER ABSTIMMUNG -->
                     @if (!string.IsNullOrWhiteSpace(Model.UmfrageMeldung))
                     {
                         <div class="home-poll-message">
@@ -106,156 +104,159 @@
                         </div>
                     }
 
-                    <!-- UMFRAGE -->
-                    @if (Model.AktiveUmfrage != null)
-                    {
-                        <div class="home-poll">
-
-                            <div class="home-poll-label">
-                                Umfrage
-                            </div>
-
-                            <!-- ANKLICKBARE UMFRAGE -->
-                            <h3 class="home-poll-title">
-                                <a asp-page="/Umfragen/Index" class="home-poll-link">
-                                    @Model.AktiveUmfrage.Frage
-                                </a>
-                            </h3>
-
-                            <div class="home-poll-ersteller text-muted small mb-2">
-                                Erstellt von:
-                                <strong>@Model.UmfrageErstellerName</strong>
-                            </div>
-
-                            @if (!string.IsNullOrWhiteSpace(Model.AktiveUmfrage.Beschreibung))
-                            {
-                                <p class="home-poll-description">
-                                    @Model.AktiveUmfrage.Beschreibung
-                                </p>
-                            }
-
-                            @if (!Model.EigeneOptionId.HasValue)
-                            {
-                                <!-- NOCH NICHT ABGESTIMMT -->
-                                <form method="post" asp-page-handler="Abstimmen">
-
-                                    <input type="hidden" name="umfrageId" value="@Model.AktiveUmfrage.Id" />
-
-                                    <div class="home-poll-options">
-                                        @foreach (var option in Model.AktiveUmfrage.Optionen.OrderBy(o => o.Sortierung))
-                                        {
-                                            <label class="home-poll-option">
-                                                <input type="radio" name="optionId" value="@option.Id" required />
-
-                                                <span>
-                                                    @option.Text
-                                                </span>
-                                            </label>
-                                        }
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary btn-sm w-100 mt-3">
-                                        Abstimmen
-                                    </button>
-                                </form>
-                            }
-                            else
-                            {
-                                <!-- BEREITS ABGESTIMMT / ERGEBNIS -->
-                                <div class="home-poll-results">
-                                    @foreach (var option in Model.AktiveUmfrage.Optionen.OrderBy(o => o.Sortierung))
-                                    {
-                                        int stimmen = option.Stimmen.Count;
-
-                                        int prozent = Model.GesamtStimmen == 0 ? 0 : (int)Math.Round(stimmen * 100.0 / Model.GesamtStimmen);
-
-                                        bool eigeneAntwort = Model.EigeneOptionId == option.Id;
-
-                                        <div class="home-poll-result">
-                                            <div class="home-poll-result-header">
-                                                <span>
-                                                    @option.Text
-
-                                                    @if (eigeneAntwort)
-                                                    {
-                                                        <strong>
-                                                            ✓
-                                                        </strong>
-                                                    }
-                                                </span>
-
-                                                <span>
-                                                    @prozent %
-                                                </span>
-                                            </div>
-
-                                            <div class="home-poll-progress">
-                                                <div class="home-poll-progress-bar"
-                                                     style="width: @prozent%;">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-
-                                    <div class="home-poll-total">
-
-                                        @Model.GesamtStimmen
-
-                                        @if (Model.GesamtStimmen == 1)
-                                        {
-                                            <text>Stimme</text>
-                                        }
-                                        else
-                                        {
-                                            <text>Stimmen</text>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    }
-
-                    <!-- KURZMELDUNGEN -->
-                    @if (Model.Kurzmeldungen.Count > 0)
-                    {
-                        <div class="home-feed-section-title">
-                            Kurzmeldungen
-                        </div>
-
-                        @foreach (var meldung in Model.Kurzmeldungen)
-                        {
-                            <a asp-page="/News/Details" asp-route-id="@meldung.Id" class="home-feed-item">
-                                <div class="home-feed-meta">
-                                    <span class="badge bg-@meldung.KategorieFarbe">
-                                        @meldung.Kategorie
-                                    </span>
-
-                                    <span>
-                                        @meldung.VeroeffentlichtAm.ToString("dd.MM.")
-                                    </span>
-                                </div>
-
-                                <div class="home-feed-title">
-                                    @meldung.Titel
-                                </div>
-
-                                @if (!string.IsNullOrWhiteSpace(meldung.Kurztext))
-                                {
-                                    <div class="home-feed-text">
-                                        @meldung.Kurztext
-                                    </div>
-                                }
-                            </a>
-                        }
-                    }
-                    else if (Model.AktiveUmfrage == null)
+                    <!-- KEINE FEED-EINTRÄGE -->
+                    @if (Model.FeedEintraege.Count == 0)
                     {
                         <div class="home-feed-empty">
-                            Aktuell gibt es keine Meldungen.
+                            Aktuell gibt es keine Meldungen oder Umfragen.
                         </div>
                     }
-                </div>
-            </div>
-        </div>
-    </div>
+                    else
+                    {
+                        <!-- GEMEINSAME CHRONOLOGISCHE AUSGABE -->
+                        @foreach (var eintrag in Model.FeedEintraege)
+                        {
+                            <!-- UMFRAGE -->
+                            @if (eintrag.Umfrage != null)
+                            {
+                                var umfrage = eintrag.Umfrage;
+
+                                int gesamtStimmen = eintrag.GesamtStimmen;
+
+                                int? eigeneOptionId = eintrag.EigeneOptionId;
+
+                                <div class="home-poll">
+                                    <!-- UMFRAGE-LABEL -->
+                                    <div class="home-poll-label">
+                                        Umfrage
+                                    </div>
+
+                                    <!-- ANKLICKBARER UMFRAGETITEL -->
+                                    <h3 class="home-poll-title">
+                                        <a asp-page="/Umfragen/Index" class="home-poll-link">
+                                            @umfrage.Frage
+                                        </a>
+                                    </h3>
+
+                                    <!-- ERSTELLER -->
+                                    <div class="home-poll-ersteller text-muted small mb-2">
+                                        Erstellt von:
+                                        <strong>
+                                            @eintrag.ErstellerName
+                                        </strong>
+                                    </div>
+
+                                    <!-- BESCHREIBUNG -->
+                                    @if (!string.IsNullOrWhiteSpace(umfrage.Beschreibung))
+                                    {
+                                        <p class="home-poll-description">
+                                            @umfrage.Beschreibung
+                                        </p>
+                                    }
+
+                                    <!-- NOCH NICHT ABGESTIMMT -->
+                                    @if (!eigeneOptionId.HasValue)
+                                    {
+                                        <form method="post" asp-page-handler="Abstimmen">
+                                            <input type="hidden" name="umfrageId" value="@umfrage.Id" />
+
+                                            <div class="home-poll-options">
+                                                @foreach (var option in umfrage.Optionen.OrderBy(o => o.Sortierung))
+                                                {
+                                                    <label class="home-poll-option">
+                                                        <input type="radio" name="optionId" value="@option.Id" required />
+                                                        <span>
+                                                            @option.Text
+                                                        </span>
+                                                    </label>
+                                                }
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary btn-sm w-100 mt-3">
+                                                Abstimmen
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <!-- BEREITS ABGESTIMMT - ERGEBNISSE -->
+                                        <div class="home-poll-results">
+                                            @foreach (var option in umfrage.Optionen.OrderBy(o => o.Sortierung))
+                                            {
+                                                int stimmen = option.Stimmen.Count;
+
+                                                int prozent = gesamtStimmen == 0 ? 0 : (int)Math.Round(stimmen * 100.0 / gesamtStimmen);
+
+                                                bool eigeneAntwort = eigeneOptionId == option.Id;
+
+                                                <div class="home-poll-result">
+                                                    <div class="home-poll-result-header">
+                                                        <span>
+                                                            @option.Text
+
+                                                            @if (eigeneAntwort)
+                                                            {
+                                                                <strong>
+                                                                    ✓
+                                                                </strong>
+                                                            }
+                                                        </span>
+
+                                                        <span>
+                                                            @prozent %
+                                                        </span>
+                                                    </div>
+
+
+                                                    <div class="home-poll-progress">
+                                                        <div class="home-poll-progress-bar" style="@($"width: {prozent}%;")"> </div>
+                                                    </div>
+                                                </div>
+                                            } 
+                                            
+                                            <!-- GESAMTSTIMMEN --> 
+                                            <div class="home-poll-total"> 
+                                                @gesamtStimmen 
+                                                @(gesamtStimmen == 1 ? "Stimme" : "Stimmen") 
+                                            </div> 
+                                        </div> 
+                                    } 
+                                </div> 
+                            } 
+                            else if (eintrag.Kurzmeldung != null) 
+                            { 
+                                var meldung = eintrag.Kurzmeldung; 
+                                
+                                <a asp-page="/News/Details" asp-route-id="@meldung.Id" class="home-feed-item"> 
+                                    <!-- KATEGORIE UND DATUM --> 
+                                    <div class="home-feed-meta"> 
+                                        <span class="badge bg-@meldung.KategorieFarbe"> 
+                                            @meldung.Kategorie 
+                                        </span> 
+
+                                        <span> 
+                                            @meldung.VeroeffentlichtAm.ToString("dd.MM.") 
+                                        </span> 
+                                    </div> 
+                                    
+                                    <!-- TITEL --> 
+                                    <div class="home-feed-title"> 
+                                        @meldung.Titel 
+                                    </div> 
+                                    
+                                    <!-- KURZTEXT --> 
+                                    @if (!string.IsNullOrWhiteSpace(meldung.Kurztext)) 
+                                    { 
+                                        <div class="home-feed-text"> 
+                                            @meldung.Kurztext 
+                                        </div> 
+                                    } 
+                                </a> 
+                            } 
+                        } 
+                    } 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
 </div>
