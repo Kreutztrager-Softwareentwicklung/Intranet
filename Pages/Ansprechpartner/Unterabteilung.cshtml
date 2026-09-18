@@ -89,26 +89,40 @@
                                 }
                             </div>
 
-                            <!-- NAME -->
-                            <h2 class="h5 fw-bold mb-1" style="color: var(--kt-dunkelblau);">
-                                @mitarbeiter.Anzeigename
-                            </h2>
+                            <div class="text-center">
+                                <!-- NAME -->
+                                <h2 class="h5 fw-bold mb-1" style="color: var(--kt-dunkelblau);">
+                                    @mitarbeiter.Anzeigename
+                                </h2>
 
-                            <!-- POSITION -->
-                            @if (!string.IsNullOrWhiteSpace(mitarbeiter.Title))
-                            {
-                                <div class="text-primary fw-semibold mb-1">
-                                    @mitarbeiter.Title
-                                </div>
-                            }
 
-                            <!-- HAUPTABTEILUNG -->
-                            @if (!string.IsNullOrWhiteSpace(mitarbeiter.Department))
-                            {
-                                <div class="text-muted">
-                                    @mitarbeiter.Department
-                                </div>
-                            }
+                                <!-- LEITUNG DER AKTUELLEN UNTERABTEILUNG -->
+                                @if (!Model.DirekteAbteilungsansicht && mitarbeiter.IstLeitungInUnterabteilung(Model.Unterabteilung))
+                                {
+                                    <div class="mb-2">
+                                        <span class="badge bg-primary">
+                                            Leitung
+                                        </span>
+                                    </div>
+                                }
+
+                                <!-- POSITION -->
+                                @if (!string.IsNullOrWhiteSpace(mitarbeiter.Title))
+                                {
+                                    <div class="text-primary fw-semibold mb-1">
+                                        @mitarbeiter.Title
+                                    </div>
+                                }
+
+                                <!-- HAUPTABTEILUNG -->
+                                @if (!string.IsNullOrWhiteSpace(mitarbeiter.Department))
+                                {
+                                    <div class="text-muted">
+                                        @mitarbeiter.Department
+                                    </div>
+                                }
+
+                            </div>
 
                             <hr />
 

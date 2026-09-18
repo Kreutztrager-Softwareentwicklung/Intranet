@@ -362,7 +362,10 @@ namespace Intranet2.Services.ActiveDirectory
                 .ToList();
         }
 
+
+        // =====================================================
         // UNTERABTEILUNGEN EINER HAUPTABTEILUNG LADEN
+        // =====================================================
         public List<UnterabteilungGruppe> GetUnterabteilungenFuerAbteilung(string abteilung)
         {
             if (string.IsNullOrWhiteSpace(abteilung))
@@ -370,18 +373,54 @@ namespace Intranet2.Services.ActiveDirectory
                 return new List<UnterabteilungGruppe>();
             }
 
-            return GetMitarbeiter()
+            // -------------------------------------------------
+            // Mitarbeiter der Hauptabteilung laden
+            // -------------------------------------------------
 
-                // Funktionskonten nicht anzeigen
+            var mitarbeiter = GetMitarbeiter()
+
                 .Where(m => !IstFunktionskonto(m))
 
-                // Nur Mitarbeiter der ausgewählten Hauptabteilung
-                .Where(m => !string.IsNullOrWhiteSpace(m.Department) && string.Equals(m.Department.Trim(), abteilung.Trim(), StringComparison.OrdinalIgnoreCase))
+                .Where(m =>
+                    !string.IsNullOrWhiteSpace(m.Department) &&
+                    string.Equals(
+                        m.Department.Trim(),
+                        abteilung.Trim(),
+                        StringComparison.OrdinalIgnoreCase))
 
-                // Nur Mitarbeiter mit einer ermittelbaren Unterabteilung
-                .Where(m => !string.IsNullOrWhiteSpace(m.Unterabteilung))
+                .ToList();
 
-                .GroupBy(m => m.Unterabteilung, StringComparer.OrdinalIgnoreCase)
+
+            // -------------------------------------------------
+            // Alle Unterabteilungszuordnungen zusammenführen
+            // -------------------------------------------------
+            //
+            // Ein Mitarbeiter mit drei Unterabteilungen erzeugt
+            // hier drei Zuordnungen.
+            //
+            // -------------------------------------------------
+
+            var zuordnungen = mitarbeiter
+
+                .SelectMany(m =>
+                    m.Unterabteilungen.Select(z => new
+                    {
+                        Mitarbeiter = m,
+                        Zuordnung = z
+                    }))
+
+                .ToList();
+
+
+            // -------------------------------------------------
+            // Nach Unterabteilung gruppieren
+            // -------------------------------------------------
+
+            return zuordnungen
+
+                .GroupBy(
+                    eintrag => eintrag.Zuordnung.Name,
+                    StringComparer.OrdinalIgnoreCase)
 
                 .Select(gruppe => new UnterabteilungGruppe
                 {
@@ -389,23 +428,33 @@ namespace Intranet2.Services.ActiveDirectory
 
                     Mitarbeiter = gruppe
 
-                        // Leitung innerhalb der Unterabteilung zuerst
-                        .OrderByDescending(m => m.IstLeitung)
+                        // Leitung nur für diese Unterabteilung
+                        // an die erste Stelle setzen.
 
-                        // Danach alphabetisch
-                        .ThenBy(m => m.LastName)
-                        .ThenBy(m => m.FirstName)
+                        .OrderByDescending(e =>
+                            e.Zuordnung.IstLeitung)
+
+                        // Danach alphabetisch sortieren.
+
+                        .ThenBy(e => e.Mitarbeiter.LastName)
+                        .ThenBy(e => e.Mitarbeiter.FirstName)
+
+                        .Select(e => e.Mitarbeiter)
 
                         .ToList()
                 })
 
-                // Unterabteilungen selbst alphabetisch
+                // Unterabteilungen alphabetisch sortieren.
                 .OrderBy(g => g.Name)
 
                 .ToList();
         }
 
+
+        // =====================================================
         // MITARBEITER EINER UNTERABTEILUNG LADEN
+        // =====================================================
+
         public List<Mitarbeiter> GetMitarbeiterFuerUnterabteilung(string abteilung, string unterabteilung)
         {
             if (string.IsNullOrWhiteSpace(abteilung) || string.IsNullOrWhiteSpace(unterabteilung))
@@ -415,18 +464,41 @@ namespace Intranet2.Services.ActiveDirectory
 
             return GetMitarbeiter()
 
-                // Funktionskonten nicht anzeigen
+                // ---------------------------------------------
+                // Funktionskonten ausschließen
+                // ---------------------------------------------
+
                 .Where(m => !IstFunktionskonto(m))
 
+                // ---------------------------------------------
                 // Hauptabteilung prüfen
-                .Where(m => !string.IsNullOrWhiteSpace(m.Department) && string.Equals(m.Department.Trim(), abteilung.Trim(), StringComparison.OrdinalIgnoreCase))
+                // ---------------------------------------------
 
-                .Where(m => !string.IsNullOrWhiteSpace(m.Unterabteilung) && string.Equals(m.Unterabteilung, unterabteilung.Trim(), StringComparison.OrdinalIgnoreCase))
+                .Where(m =>
+                    !string.IsNullOrWhiteSpace(m.Department) &&
+                    string.Equals(
+                        m.Department.Trim(),
+                        abteilung.Trim(),
+                        StringComparison.OrdinalIgnoreCase))
 
-                // Leitung IMMER zuerst
-                .OrderByDescending(m => m.IstLeitung)
+                // ---------------------------------------------
+                // Mitgliedschaft in der gewählten Unterabteilung
+                // ---------------------------------------------
 
+                .Where(m =>
+                    m.IstInUnterabteilung(unterabteilung))
+
+                // ---------------------------------------------
+                // Leitung DIESER Unterabteilung zuerst
+                // ---------------------------------------------
+
+                .OrderByDescending(m =>
+                    m.IstLeitungInUnterabteilung(unterabteilung))
+
+                // ---------------------------------------------
                 // Danach alphabetisch
+                // ---------------------------------------------
+
                 .ThenBy(m => m.LastName)
                 .ThenBy(m => m.FirstName)
 

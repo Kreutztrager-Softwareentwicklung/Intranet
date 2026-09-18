@@ -1,7 +1,6 @@
 ﻿@{
     string aktuelleSeite = ViewContext.RouteData.Values["page"]?.ToString() ?? string.Empty;
-    bool istAbteilungsSuche = aktuelleSeite.EndsWith(
-        "/Abteilungen", StringComparison.OrdinalIgnoreCase);
+    bool istAbteilungsSuche = aktuelleSeite.EndsWith("/Abteilungen", StringComparison.OrdinalIgnoreCase);
     string modus = istAbteilungsSuche ? "abteilung" : "standort";
 }
 
@@ -37,6 +36,8 @@
         const ergebnisContainer = document.getElementById("mitarbeiterSuchErgebnis");
         const modus             = suchfeld?.dataset.modus ?? "standort";
 
+        if (!suchfeld || !ergebnisContainer) return;
+
             // =====================================================
             // KOMPLETTE MITARBEITERKARTE ANKLICKBAR MACHEN
             // =====================================================
@@ -68,8 +69,6 @@
 
             });
 
-        if (!suchfeld || !ergebnisContainer) return;
-
         let debounceTimer = null;
 
         suchfeld.addEventListener("input", function () {
@@ -97,16 +96,26 @@
                         }
 
                         mitarbeiter.forEach(function (m) {
-                            const istGF = m.department === "Geschäftsführung" ||
-                                          m.department === "Geschaeftsfuehrung";
+                            // Erste Hauptabteilung als Navigationsziel verwenden
+const zielAbteilung =
+    m.abteilungen?.[0] || m.department;
+
+// Geschäftsführung erkennen
+const istGF =
+    zielAbteilung === "Geschäftsführung" ||
+    zielAbteilung === "Geschaeftsfuehrung";
 
                             // Link je nach Modus
                             let linkHref = "#";
                             if (modus === "abteilung") {
                                 if (istGF) {
                                     linkHref = `/Ansprechpartner/Unterabteilung?abteilung=${encodeURIComponent(m.department)}&person=${encodeURIComponent(m.samAccountName)}&direkt=true`;
-                                } else if (m.department && m.unterabteilung) {
-                                    linkHref = `/Ansprechpartner/Unterabteilung?abteilung=${encodeURIComponent(m.department)}&unterabteilung=${encodeURIComponent(m.unterabteilung)}&person=${encodeURIComponent(m.samAccountName)}`;
+
+                                } else if (m.department && (m.unterabteilungen?.length || m.unterabteilung)) {
+                                    // Erste Unterabteilung als Ziel verwenden.
+                                    const zielUnterabteilung = m.unterabteilungen?.[0]?.name || m.unterabteilung;
+
+                                    linkHref = `/Ansprechpartner/Unterabteilung?abteilung=${encodeURIComponent(m.department)}&unterabteilung=${encodeURIComponent(zielUnterabteilung)}&person=${encodeURIComponent(m.samAccountName)}`;
                                 } else if (m.department) {
                                     linkHref = `/Ansprechpartner/Abteilung?abteilung=${encodeURIComponent(m.department)}`;
                                 }
@@ -116,17 +125,19 @@
                                 }
                             }
 
-                            const leitungBadge = m.istLeitung
-                                ? '<span class="mitarbeiter-suche-leitung">Leitung</span>' : "";
-                            const telefon = m.telefon
-                                ? `<a href="tel:${m.telefon}" class="mitarbeiter-suche-kontakt-link">Tel. ${m.telefon}</a>` : "";
-                            const mobil = m.mobil
-                                ? `<a href="tel:${m.mobil}" class="mitarbeiter-suche-kontakt-link">Mobil ${m.mobil}</a>` : "";
-                            const email = m.email
-                                ? `<a href="mailto:${m.email}" class="mitarbeiter-suche-kontakt-link">E-Mail</a>` : "";
 
-                            const meta = [m.department, m.unterabteilung, m.niederlassung]
-                                .filter(Boolean).join(" · ");
+                            // Leitungsfunktionen der einzelnen Unterabteilungen anzeigen 
+                            const leitungBadge = (m.unterabteilungen ?? []).filter(z => z.istLeitung).map(z => `<span class="mitarbeiter-suche-leitung">Leitung: ${z.name}</span>`).join(" ");
+                            const telefon = m.telefon ? `<a href="tel:${m.telefon}" class="mitarbeiter-suche-kontakt-link">Tel. ${m.telefon}</a>` : "";
+                            const mobil = m.mobil ? `<a href="tel:${m.mobil}" class="mitarbeiter-suche-kontakt-link">Mobil ${m.mobil}</a>` : "";
+                            const email = m.email ? `<a href="mailto:${m.email}" class="mitarbeiter-suche-kontakt-link">E-Mail</a>` : "";
+
+
+                            // Alle Unterabteilungen zu einem Text zusammenfassen
+                            const unterabteilungenText = (m.unterabteilungen ?? []).map(z => z.name).join(" / ");
+
+                            // Hauptabteilung, sämtliche Unterabteilungen und Standort anzeigen
+                            const meta = [m.department, unterabteilungenText || m.unterabteilung, m.niederlassung].filter(Boolean).join(" · ");
 
                             ergebnisContainer.innerHTML += `
                                 <div class="mitarbeiter-suche-eintrag">

@@ -105,57 +105,205 @@
             }
         }
 
-        // UNTERABTEILUNG AUS AD-BESCHREIBUNG
+
+        // =====================================================
+        // UNTERABTEILUNGEN AUS DEM AD-FELD "BESCHREIBUNG"
+        // =====================================================
+        //
+        // Beispiele:
+        //
+        // E-Montage
+        //
+        // E-Montage / E-Engineering
+        //
+        // E-Montage (Leitung) / E-Engineering
+        //
+        // E-Montage (Leitung) / E-Engineering (Leitung)
+        //
+        // Alte Schreibweise wird ebenfalls berücksichtigt:
+        // E-Montage / Leitung
+        //
+        // =====================================================
+
+        public List<UnterabteilungZuordnung> Unterabteilungen
+        {
+            get
+            {
+                var zuordnungen = new List<UnterabteilungZuordnung>();
+
+                if (string.IsNullOrWhiteSpace(Description))
+                {
+                    return zuordnungen;
+                }
+
+                // Einzelne Unterabteilungen am Schrägstrich trennen.
+                string[] teile = Description.Split(
+                    '/',
+                    StringSplitOptions.TrimEntries |
+                    StringSplitOptions.RemoveEmptyEntries);
+
+                const string leitungsSuffix = "(Leitung)";
+
+                foreach (string teil in teile)
+                {
+                    // ---------------------------------------------
+                    // Bisherige Schreibweise unterstützen:
+                    // E-Montage / Leitung
+                    // ---------------------------------------------
+
+                    if (string.Equals(
+                        teil,
+                        "Leitung",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (zuordnungen.Count > 0)
+                        {
+                            zuordnungen[^1].IstLeitung = true;
+                        }
+
+                        continue;
+                    }
+
+                    // ---------------------------------------------
+                    // Neue Schreibweise erkennen:
+                    // E-Montage (Leitung)
+                    // ---------------------------------------------
+
+                    bool istLeitung = teil.EndsWith(
+                        leitungsSuffix,
+                        StringComparison.OrdinalIgnoreCase);
+
+                    string name = istLeitung
+                        ? teil[..^leitungsSuffix.Length].Trim()
+                        : teil.Trim();
+
+                    // Leere Unterabteilungen ignorieren.
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        continue;
+                    }
+
+                    // ---------------------------------------------
+                    // Doppelte Unterabteilungen vermeiden
+                    // ---------------------------------------------
+
+                    UnterabteilungZuordnung? vorhanden =
+                        zuordnungen.FirstOrDefault(z =>
+                            string.Equals(
+                                z.Name,
+                                name,
+                                StringComparison.OrdinalIgnoreCase));
+
+                    if (vorhanden != null)
+                    {
+                        // Falls derselbe Bereich mehrfach vorkommt,
+                        // bleibt eine vorhandene Leitungsfunktion erhalten.
+
+                        if (istLeitung)
+                        {
+                            vorhanden.IstLeitung = true;
+                        }
+
+                        continue;
+                    }
+
+                    // ---------------------------------------------
+                    // Neue Zuordnung hinzufügen
+                    // ---------------------------------------------
+
+                    zuordnungen.Add(new UnterabteilungZuordnung
+                    {
+                        Name = name,
+                        IstLeitung = istLeitung
+                    });
+                }
+
+                return zuordnungen;
+            }
+        }
+
+
+        // =====================================================
+        // BISHERIGE EIGENSCHAFT ZUR KOMPATIBILITÄT
+        // =====================================================
+        //
+        // Liefert weiterhin die erste Unterabteilung.
+        //
+        // Bestehende Seiten, die Unterabteilung verwenden,
+        // bleiben damit grundsätzlich funktionsfähig.
+        //
+        // =====================================================
+
         public string Unterabteilung
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(Description))
-                {
-                    return string.Empty;
-                }
-
-                string beschreibung = Description.Trim();
-
-                int letzterTrenner = beschreibung.LastIndexOf('/');
-
-                if (letzterTrenner >= 0)
-                {
-                    string letzterTeil = beschreibung[(letzterTrenner + 1)..].Trim();
-
-                    if (string.Equals(letzterTeil, "Leitung", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return beschreibung[..letzterTrenner].Trim();
-                    }
-                }
-                return beschreibung;
+                return Unterabteilungen.FirstOrDefault()?.Name
+                    ?? string.Empty;
             }
         }
 
-        // LEITUNG ERKENNEN
+
+        // =====================================================
+        // ALLGEMEINE LEITUNGSFUNKTION
+        // =====================================================
+        //
+        // True, wenn der Mitarbeiter in mindestens einer
+        // Unterabteilung Leitung ist.
+        //
+        // =====================================================
+
         public bool IstLeitung
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(Description))
-                {
-                    return false;
-                }
-
-                string beschreibung = Description.Trim();
-
-                int letzterTrenner = beschreibung.LastIndexOf('/');
-
-                if (letzterTrenner < 0)
-                {
-                    return false;
-                }
-
-                string letzterTeil = beschreibung[(letzterTrenner + 1)..].Trim();
-
-                return string.Equals(letzterTeil, "Leitung", StringComparison.OrdinalIgnoreCase);
+                return Unterabteilungen.Any(z => z.IstLeitung);
             }
         }
+
+
+        // =====================================================
+        // LEITUNGSFUNKTION EINER BESTIMMTEN UNTERABTEILUNG
+        // =====================================================
+        public bool IstLeitungInUnterabteilung(string unterabteilung)
+        {
+            if (string.IsNullOrWhiteSpace(unterabteilung))
+            {
+                return false;
+            }
+
+            return Unterabteilungen.Any(z =>
+                z.IstLeitung &&
+                string.Equals(
+                    z.Name,
+                    unterabteilung.Trim(),
+                    StringComparison.OrdinalIgnoreCase));
+        }
+
+
+        // =====================================================
+        // ZUGEHÖRIGKEIT ZU EINER UNTERABTEILUNG
+        // =====================================================
+        public bool IstInUnterabteilung(string unterabteilung)
+        {
+            if (string.IsNullOrWhiteSpace(unterabteilung))
+            {
+                return false;
+            }
+
+            return Unterabteilungen.Any(z =>
+                string.Equals(
+                    z.Name,
+                    unterabteilung.Trim(),
+                    StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    public class UnterabteilungZuordnung
+    {
+        public string Name { get; set; } = string.Empty;
+
+        public bool IstLeitung { get; set; }
     }
 
 
