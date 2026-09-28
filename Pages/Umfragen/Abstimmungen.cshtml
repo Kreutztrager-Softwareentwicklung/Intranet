@@ -1,0 +1,100 @@
+﻿@page
+@model Intranet2.Pages.Umfragen.AbstimmungenModel
+
+@{
+    ViewData["Title"] = "Einzelstimmen";
+}
+
+<div class="container py-4">
+    <!-- ZURÜCK -->
+    <div class="mb-4">
+        <a asp-page="/Umfragen/Index" class="text-decoration-none">
+            ← Zurück zu den Umfragen
+        </a>
+    </div>
+
+    <!-- ÜBERSCHRIFT -->
+    <h1 class="fw-bold mb-2" style="color: var(--kt-dunkelblau);">
+        Einzelstimmen
+    </h1>
+
+    <!-- UMFRAGE -->
+    <p class="text-muted mb-3">
+        @Model.Frage
+    </p>
+
+    <!-- ANZAHL -->
+    <p class="text-muted">
+        Insgesamt:
+
+        <strong>
+            @Model.Stimmen.Count
+        </strong>
+
+        @(Model.Stimmen.Count == 1 ? "Stimme" : "Stimmen")
+    </p>
+
+    <!-- KEINE STIMMEN -->
+    @if (Model.Stimmen.Count == 0)
+    {
+        <div class="alert alert-secondary">
+            Für diese Umfrage liegen noch keine Stimmen vor.
+        </div>
+    }
+    else
+    {
+        <!-- TABELLE -->
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">
+                                Mitarbeiter
+                            </th>
+
+                            <th scope="col">
+                                Gewählte Antwort
+                            </th>
+
+                            <th scope="col">
+                                Abgestimmt am
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var stimme in Model.Stimmen)
+                        {
+                            <tr>
+                                <!-- MITARBEITER -->
+                                <td>
+                                    <strong>
+                                        @stimme.Name
+                                    </strong>
+
+                                    @if (!string.Equals(stimme.Name, stimme.WindowsBenutzername, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <div class="small text-muted">
+                                            @stimme.WindowsBenutzername
+                                        </div>
+                                    }
+                                </td>
+
+                                <!-- ANTWORT -->
+                                <td>
+                                    @stimme.Antwort
+                                </td>
+
+                                <!-- ZEITPUNKT -->
+                                <td>
+                                    @stimme.AbgestimmtAmUtc.ToString("dd.MM.yyyy HH:mm")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

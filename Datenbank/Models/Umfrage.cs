@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace Intranet2.Datenbank.Models
 {
@@ -18,6 +19,10 @@ namespace Intranet2.Datenbank.Models
         public DateTime? EndetAm { get; set; }
 
         public bool IstAktiv { get; set; } = true;
+
+        // Nur bei aktivierter Einstellung dürfen Ersteller
+        // und Administratoren die einzelnen Stimmen sehen.
+        public bool NamentlicheAuswertung { get; set; } = false;
 
         public DateTime ErstelltAm { get; set; } = DateTime.UtcNow;
 

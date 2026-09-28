@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Intranet2.Services.ActiveDirectory;
+using Intranet2.Sicherheit;
 
 namespace Intranet2.Pages.Umfragen
 {
@@ -26,6 +27,8 @@ namespace Intranet2.Pages.Umfragen
 
         public bool IstBeendet { get; set; }
 
+        public bool DarfEinzelstimmenSehen { get; set; }
+
         public int? EigeneOptionId { get; set; }
 
         public int GesamtStimmen { get; set; }
@@ -46,6 +49,9 @@ namespace Intranet2.Pages.Umfragen
             }
 
             Umfrage = umfrage;
+
+            // BERECHTIGUNG FÜR EINZELSTIMMEN-BUTTON
+            DarfEinzelstimmenSehen = umfrage.NamentlicheAuswertung && (User.IsInRole(Rollen.Admin) || (!string.IsNullOrWhiteSpace(User.Identity?.Name) && string.Equals(User.Identity.Name, umfrage.ErstelltVon, StringComparison.OrdinalIgnoreCase)));
 
             // ERSTELLER DER UMFRAGE ERMITTELN
             if (!string.IsNullOrWhiteSpace(umfrage.ErstelltVon))
@@ -134,15 +140,15 @@ namespace Intranet2.Pages.Umfragen
             }
 
             UmfrageStimme stimme = new UmfrageStimme
-                {
-                    UmfrageId = umfrageId,
-
-                    UmfrageOptionId = optionId,
-
-                    WindowsBenutzername = windowsBenutzername,
-
-                    AbgestimmtAm = DateTime.UtcNow
-                };
+            {
+                UmfrageId = umfrageId,
+                
+                UmfrageOptionId = optionId,
+                
+                WindowsBenutzername = windowsBenutzername,
+                
+                AbgestimmtAm = DateTime.UtcNow
+            };
 
             _context.UmfrageStimmen.Add(stimme);
 

@@ -63,6 +63,8 @@ namespace Intranet2.Pages.Admin
 
                     IstAktiv = umfrage.IstAktiv,
 
+                    NamentlicheAuswertung = umfrage.NamentlicheAuswertung,
+
                     Optionen = umfrage.Optionen.OrderBy(o => o.Sortierung).Select(o => o.Text).ToList()
                 };
 
@@ -118,6 +120,8 @@ namespace Intranet2.Pages.Admin
 
                         IstAktiv = Formular.IstAktiv,
 
+                        NamentlicheAuswertung = Formular.NamentlicheAuswertung,
+
                         ErstelltAm = DateTime.UtcNow,
 
                         ErstelltVon = User.Identity?.Name
@@ -153,6 +157,25 @@ namespace Intranet2.Pages.Admin
 
                 bool hatStimmen = await _context.UmfrageStimmen.AnyAsync(s => s.UmfrageId == umfrage.Id);
 
+
+                // Nach der ersten Stimmabgabe darf die Einstellung
+                // nicht mehr verändert werden.
+
+                if (hatStimmen && Formular.NamentlicheAuswertung != umfrage.NamentlicheAuswertung)
+                {
+                    Formular.NamentlicheAuswertung = umfrage.NamentlicheAuswertung;
+
+                    ModelState.Remove("Formular.NamentlicheAuswertung");
+
+                    ModelState.AddModelError(string.Empty, "Die namentliche Auswertung kann nach der ersten Stimme nicht mehr geändert werden.");
+
+                    BearbeitungHatStimmen = true;
+
+                    await LadeUmfragenAsync();
+
+                    return Page();
+                }
+
                 umfrage.Frage = Formular.Frage.Trim();
 
                 umfrage.Beschreibung = string.IsNullOrWhiteSpace(Formular.Beschreibung) ? null : Formular.Beschreibung.Trim();
@@ -162,6 +185,12 @@ namespace Intranet2.Pages.Admin
                 umfrage.EndetAm = Formular.EndetAm;
 
                 umfrage.IstAktiv = Formular.IstAktiv;
+
+                // Nur vor der ersten Stimmabgabe veränderbar.
+                if (!hatStimmen)
+                {
+                    umfrage.NamentlicheAuswertung = Formular.NamentlicheAuswertung;
+                }
 
                 // Antwortmöglichkeiten nur ändern,
                 // solange noch niemand abgestimmt hat.
@@ -235,6 +264,8 @@ namespace Intranet2.Pages.Admin
             public DateTime? EndetAm { get; set; }
 
             public bool IstAktiv { get; set; } = true;
+
+            public bool NamentlicheAuswertung { get; set; } = false;
 
             public List<string> Optionen { get; set; } = new() { string.Empty, string.Empty };
         }

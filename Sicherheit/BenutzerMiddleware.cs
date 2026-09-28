@@ -40,6 +40,13 @@ namespace Intranet2.Sicherheit
                 if (!string.IsNullOrWhiteSpace(windowsBenutzername))
                 {
                     await VerarbeiteBenutzerAsync(context, db, windowsBenutzername);
+
+                    // Gesperrte Konten nicht an die nachfolgende Middleware oder die Razor Pages weiterleiten.
+
+                    if (context.Response.StatusCode == StatusCodes.Status403Forbidden)
+                    {
+                        return;
+                    }
                 }
             }
 

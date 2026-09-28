@@ -66,6 +66,47 @@
                     <textarea asp-for="Formular.Beschreibung" class="form-control" rows="3"></textarea>
                 </div>
 
+                <!-- NAMENTLICHE AUSWERTUNG -->
+                <div class="mb-4">
+                    @if (Model.BearbeitungHatStimmen)
+                    {
+                        <!-- Bereits abgestimmt: Einstellung gesperrt -->
+                        <div class="d-flex align-items-center gap-2">
+                            <input class="form-check-input m-0 flex-shrink-0" type="checkbox" checked="@Model.Formular.NamentlicheAuswertung" disabled />
+
+                            <label class="form-check-label mb-0">
+                                Antworten einsehbar machen.
+                            </label>
+                        </div>
+
+                        <input type="hidden" asp-for="Formular.NamentlicheAuswertung" />
+
+                        <div class="form-text">
+                            Nach der ersten Stimme kann diese Einstellung
+                            nicht mehr geändert werden.
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Noch keine Stimmen: Einstellung veränderbar -->
+                        <div class="d-flex align-items-center gap-2">
+                            <input asp-for="Formular.NamentlicheAuswertung" class="form-check-input m-0 flex-shrink-0" />
+
+                            <label asp-for="Formular.NamentlicheAuswertung" class="form-check-label mb-0">
+                                Antworten einsehbar machen.
+                            </label>
+                        </div>
+
+                        <div class="form-text">
+                            Einsicht in die Antworten der Umfrage.
+                        </div>
+                    }
+
+                    <span asp-validation-for="Formular.NamentlicheAuswertung" class="text-danger">
+                    </span>
+
+                </div>
+
                 <!-- ANTWORTMÖGLICHKEITEN -->
                 <div class="mb-4">
                     <label class="form-label">
@@ -268,6 +309,14 @@
                                     <a asp-page="/Admin/Umfragen" asp-route-bearbeitenId="@umfrage.Id" class="btn btn-sm btn-outline-primary">
                                         Bearbeiten
                                     </a>
+
+
+                                    @if (umfrage.NamentlicheAuswertung && (User.IsInRole(Rollen.Admin) || (!string.IsNullOrWhiteSpace(User.Identity?.Name) && string.Equals(User.Identity.Name, umfrage.ErstelltVon, StringComparison.OrdinalIgnoreCase))))
+                                    {
+                                        <a asp-page="/Umfragen/Abstimmungen" asp-route-id="@umfrage.Id" class="btn btn-sm btn-outline-secondary">
+                                            Einzelstimmen
+                                        </a>
+                                    }
 
                                     <form method="post" asp-page-handler="Loeschen" onsubmit="return confirm('Diese Umfrage wirklich löschen?');">
 

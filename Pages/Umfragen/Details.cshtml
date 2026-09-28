@@ -43,6 +43,12 @@
                     @Model.Umfrage.Frage
                 </h1>
 
+                @if (Model.DarfEinzelstimmenSehen)
+                {
+                    <a asp-page="/Umfragen/Abstimmungen" asp-route-id="@Model.Umfrage.Id" class="btn btn-outline-primary btn-sm mb-3">
+                        Einzelstimmen einsehen
+                    </a>
+                }
 
                 <!-- =====================================================
                 ERSTELLER UND TEAMS-KONTAKT
@@ -92,6 +98,17 @@
 
                 @if (!Model.IstBeendet && !Model.EigeneOptionId.HasValue)
                 {
+
+                    @if (Model.Umfrage.NamentlicheAuswertung)
+                    {
+                        <div class="alert alert-info small" role="note">
+                            Diese Umfrage wird namentlich ausgewertet.
+
+                            Der Ersteller und Administratoren können sehen,
+                            wer welche Antwort gewählt hat.
+                        </div>
+                    }
+
                     <!-- ABSTIMMEN -->
                     <form method="post" asp-page-handler="Abstimmen">
 
