@@ -525,6 +525,276 @@
     content: url("/Images/LogoKKT_dark.png");
 }
 
+/* =========================================================
+   26. DARK MODE - FINALE OVERRIDES
+   Fehlende Bootstrap- und Seitenelemente
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   ALLGEMEINE BOOTSTRAP-FARBEN
+   --------------------------------------------------------- */
+
+[data-theme="dark"] {
+    --bs-body-bg: #161824;
+    --bs-body-color: #c8d0e0;
+    --bs-border-color: #2e3348;
+}
+
+
+    /* ---------------------------------------------------------
+   TABELLEN
+   Admin Benutzer, News, Umfragen usw.
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .table {
+        --bs-table-color: #c8d0e0;
+        --bs-table-bg: #1e2130;
+        --bs-table-border-color: #3a3f58;
+        --bs-table-striped-color: #c8d0e0;
+        --bs-table-striped-bg: #222638;
+        --bs-table-hover-color: #e0e6f0;
+        --bs-table-hover-bg: #252a3d;
+        color: #c8d0e0;
+        border-color: #3a3f58;
+    }
+
+    [data-theme="dark"] .table-light {
+        --bs-table-color: #e0e6f0;
+        --bs-table-bg: #252840;
+        --bs-table-border-color: #3a3f58;
+    }
+
+    [data-theme="dark"] .table > thead > tr > th {
+        color: #e0e6f0 !important;
+        background-color: #252840 !important;
+        border-color: #3a3f58 !important;
+    }
+
+    [data-theme="dark"] .table > tbody > tr > td {
+        color: #c8d0e0 !important;
+        background-color: #1e2130 !important;
+        border-color: #3a3f58 !important;
+    }
+
+    [data-theme="dark"] .table-hover > tbody > tr:hover > * {
+        color: #e0e6f0 !important;
+        background-color: #252a3d !important;
+    }
+
+
+    /* ---------------------------------------------------------
+   CARDS
+   Besonders Admin-Seite
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .card-header,
+    [data-theme="dark"] .card-footer {
+        color: #c8d0e0;
+        background-color: #252840 !important;
+        border-color: #2e3348 !important;
+    }
+
+
+    /* ---------------------------------------------------------
+   NORMALE BOOTSTRAP-ACCORDIONS
+   z. B. Ersthelfer
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .accordion {
+        --bs-accordion-color: #c8d0e0;
+        --bs-accordion-bg: #1e2130;
+        --bs-accordion-border-color: #2e3348;
+        --bs-accordion-btn-color: #e0e6f0;
+        --bs-accordion-btn-bg: #1e2130;
+        --bs-accordion-active-color: #29b6d8;
+        --bs-accordion-active-bg: #252840;
+    }
+
+    [data-theme="dark"] .accordion-item {
+        color: #c8d0e0;
+        background-color: #1e2130;
+        border-color: #2e3348;
+    }
+
+    [data-theme="dark"] .accordion-button {
+        color: #e0e6f0;
+        background-color: #1e2130;
+        border-color: #2e3348;
+        box-shadow: none;
+    }
+
+        [data-theme="dark"] .accordion-button:not(.collapsed) {
+            color: #29b6d8;
+            background-color: #252840;
+            box-shadow: none;
+        }
+
+        [data-theme="dark"] .accordion-button:focus {
+            border-color: #29b6d8;
+            box-shadow: 0 0 0 0.2rem rgba(41, 182, 216, 0.15);
+        }
+
+        [data-theme="dark"] .accordion-button::after {
+            filter: brightness(0) invert(1);
+        }
+
+    [data-theme="dark"] .accordion-body {
+        color: #c8d0e0;
+        background-color: #1e2130;
+    }
+
+
+    /* ---------------------------------------------------------
+   VERSCHACHTELTE NAVIGATION
+   Dokumente / Wiki, Kreutzträger+ usw.
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .main-nav .dropdown-menu,
+    [data-theme="dark"] .main-nav .dropdown-submenu > .dropdown-menu {
+        color: #c8d0e0 !important;
+        background-color: #1a1d2e !important;
+        border-color: #2e3348 !important;
+    }
+
+    [data-theme="dark"] .main-nav .dropdown-item {
+        color: #c8d0e0 !important;
+        background-color: transparent;
+    }
+
+        [data-theme="dark"] .main-nav .dropdown-item:hover,
+        [data-theme="dark"] .main-nav .dropdown-item:focus {
+            color: #29b6d8 !important;
+            background-color: #252840 !important;
+        }
+
+
+    /* ---------------------------------------------------------
+   NEWS-EDITOR
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .news-editor-toolbar {
+        background-color: #252840 !important;
+        border-color: #2e3348 !important;
+    }
+
+    [data-theme="dark"] .news-editor-divider {
+        background-color: #4a5070 !important;
+    }
+
+    [data-theme="dark"] .news-editor {
+        color: #c8d0e0 !important;
+        background-color: #1e2130 !important;
+        border-color: #2e3348 !important;
+    }
+
+        [data-theme="dark"] .news-editor:focus {
+            border-color: #29b6d8 !important;
+            box-shadow: 0 0 0 0.2rem rgba(41, 182, 216, 0.15) !important;
+        }
+
+        [data-theme="dark"] .news-editor h2,
+        [data-theme="dark"] .news-editor h3 {
+            color: #e0e6f0;
+        }
+
+
+    /* ---------------------------------------------------------
+   CHECKBOXEN / RADIOBUTTONS
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .form-check-label {
+        color: #c8d0e0;
+    }
+
+    [data-theme="dark"] .form-check-input {
+        background-color: #252840;
+        border-color: #4a5070;
+    }
+
+        [data-theme="dark"] .form-check-input:checked {
+            background-color: #29b6d8;
+            border-color: #29b6d8;
+        }
+
+
+    /* ---------------------------------------------------------
+   DATEI-UPLOAD
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .form-control[type="file"] {
+        color: #c8d0e0;
+        background-color: #252840;
+    }
+
+        [data-theme="dark"] .form-control[type="file"]::file-selector-button {
+            color: #c8d0e0;
+            background-color: #2e3348;
+            border-color: #3a3f58;
+        }
+
+        [data-theme="dark"] .form-control[type="file"]:hover::file-selector-button {
+            background-color: #3a3f58;
+        }
+
+
+    /* ---------------------------------------------------------
+   ERSTHELFER / BEAUFTRAGTE
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .beauftragten-name {
+        color: #e0e6f0;
+    }
+
+    [data-theme="dark"] .beauftragten-untertitel {
+        color: #8a95a8;
+    }
+
+    [data-theme="dark"] .kontakt-label {
+        color: #a0aabb;
+    }
+
+    [data-theme="dark"] .beauftragten-bild-wrap {
+        background-color: #252840;
+    }
+
+
+    /* ---------------------------------------------------------
+   LIST-GROUP
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .list-group-item {
+        color: #c8d0e0;
+        background-color: #1e2130;
+        border-color: #2e3348;
+    }
+
+
+    /* ---------------------------------------------------------
+   MODALS
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] .modal-content {
+        color: #c8d0e0;
+        background-color: #1e2130;
+        border-color: #2e3348;
+    }
+
+    [data-theme="dark"] .modal-header,
+    [data-theme="dark"] .modal-footer {
+        border-color: #2e3348;
+    }
+
+
+    /* ---------------------------------------------------------
+   HR / TRENNLINIEN
+   --------------------------------------------------------- */
+
+    [data-theme="dark"] hr {
+        border-color: #3a3f58;
+        opacity: 1;
+    }
+
 
 /* =========================================================
    3. GLOBALE BASIS
