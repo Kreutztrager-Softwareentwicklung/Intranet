@@ -40,7 +40,9 @@ namespace Intranet2.Pages.Notfall
             "erlhoff",
             "kautz",
             "mindt",
-            "heimbold"
+            "heimbold",
+            "ebert",
+            "achberger"
         };
 
         public void OnGet()
