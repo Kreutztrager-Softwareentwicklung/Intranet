@@ -54,3 +54,69 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
 });
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+(function () {
+    const HTML = document.documentElement;
+    const STORAGE_KEY = 'kt-theme';
+
+    // Theme beim Laden sofort anwenden (verhindert Flackern)
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'dark') {
+        HTML.setAttribute('data-theme', 'dark');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('darkModeToggle');
+        const icon = document.getElementById('darkModeIcon');
+
+        if (!btn) return;
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                HTML.setAttribute('data-theme', 'dark');
+                icon.textContent = '☀️';
+                localStorage.setItem(STORAGE_KEY, 'dark');
+            } else {
+                HTML.setAttribute('data-theme', '');
+                icon.textContent = '🌙';
+                localStorage.setItem(STORAGE_KEY, 'light');
+            }
+        }
+
+        // Initiales Icon setzen
+        applyTheme(localStorage.getItem(STORAGE_KEY) === 'dark' ? 'dark' : 'light');
+
+        // Klick-Event
+        btn.addEventListener('click', function () {
+            const current = HTML.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+
+        // Optional: Systemeinstellung des Browsers berücksichtigen (nur beim ersten Besuch)
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) applyTheme('dark');
+        }
+    });
+})();
+
+function applyTheme(theme) {
+    const logo = document.getElementById('kt-logo-img');  // NEU
+
+    if (theme === 'dark') {
+        HTML.setAttribute('data-theme', 'dark');
+        icon.textContent = '☀️';
+        localStorage.setItem(STORAGE_KEY, 'dark');
+        if (logo) logo.src = '/Images/LogoKKT_dark.png';  // NEU
+    } else {
+        HTML.setAttribute('data-theme', '');
+        icon.textContent = '🌙';
+        localStorage.setItem(STORAGE_KEY, 'light');
+        if (logo) logo.src = '/Images/LogoKKT_transparent.png';  // NEU
+    }
+}
+

@@ -1,6 +1,6 @@
 ﻿@inject Intranet2.Services.ActiveDirectory.MitarbeiterService MitarbeiterService
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de" data-theme="">
 
 @{
     int neueMarktplatzBeitraege = Context.Items["NeueMarktplatzBeitraege"] is int anzahl ? anzahl : 0;
@@ -23,7 +23,7 @@
                 <!-- LINKS: KREUTZTRÄGER-LOGO -->
                 <div class="kt-topbar-left">
                     <a asp-page="/Index" class="kt-logo-link">
-                        <img src="~/Images/LogoKKT.png" alt="Kreutzträger Kältetechnik" class="kt-topbar-logo" />
+                        <img src="~/Images/LogoKKT_transparent.png" id="kt-logo-img" alt="Kreutzträger Kältetechnik" class="kt-topbar-logo" />
                     </a>
                 </div>
 
@@ -61,6 +61,7 @@
                                 Hallo @anzeigename!
                             </span>
                         </div>
+
                     }
 
                 </div>
@@ -615,6 +616,9 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <!--<li><a class="dropdown-item" href="">Mein Arbeitsplatz</a></li>-->
                                 <li><a class="dropdown-item" asp-page="/MeinBereich/Profil">Mein Profil</a></li>
+
+                                <!-- Dark Mode Toggle -->
+                                <li><button id="darkModeToggle" title="Dark Mode umschalten" aria-label="Dark Mode umschalten"><span id="darkModeIcon">🌙</span> </button></li>
                             </ul>
 
                         </li>

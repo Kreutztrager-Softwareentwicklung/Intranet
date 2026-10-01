@@ -59,6 +59,472 @@
     --kt-topbar-padding-h: 4vw;
 }
 
+/* =========================================================
+   2b. DARK MODE - VARIABLEN
+   ========================================================= */
+[data-theme="dark"] {
+    /* Unternehmensfarben (angepasst) */
+    --kt-hellblau: #29b6d8;
+    --kt-hellblau-hover: #1fa3c4;
+    --kt-dunkelblau: #a8b8d8;
+    --kt-rot: #ff4d57;
+    --kt-weiss: #1e2130;
+    --kt-grau: #161824;
+    /* Text und Rahmen */
+    --kt-text-muted: #8a95a8;
+    --kt-border: #2e3348;
+    --kt-border-light: #252840;
+    /* Navigation */
+    --kt-nav-bg: #1a1d2e;
+    --kt-nav-hover-bg: #222538;
+    --kt-nav-text: #c8d0e0;
+    --kt-nav-hover-text: #29b6d8;
+    --kt-nav-border: #2e3348;
+    /* Topbar */
+    --kt-topbar-bg: #1e2130;
+    /* Schatten */
+    --kt-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.35);
+    --kt-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+    /* Globale Hintergrund- und Textfarbe im Dark Mode */
+    [data-theme="dark"] body {
+        background-color: var(--kt-grau);
+        color: #c8d0e0;
+    }
+
+    /* Topbar */
+    [data-theme="dark"] .kt-topbar,
+    [data-theme="dark"] .kt-topbar-inner {
+        background-color: var(--kt-weiss);
+        border-bottom-color: var(--kt-border);
+    }
+
+    /* Navigation */
+    [data-theme="dark"] .main-nav,
+    [data-theme="dark"] .nav-box {
+        background-color: var(--kt-nav-bg);
+        color: var(--kt-nav-text) !important;
+    }
+
+        [data-theme="dark"] .nav-box:hover,
+        [data-theme="dark"] .nav-box:focus,
+        [data-theme="dark"] .nav-box.active,
+        [data-theme="dark"] .nav-item.active > .nav-box,
+        [data-theme="dark"] .nav-item.dropdown:hover > .nav-box,
+        [data-theme="dark"] .nav-item.dropdown.show > .nav-box {
+            background-color: var(--kt-nav-hover-bg);
+            color: var(--kt-nav-hover-text) !important;
+        }
+
+        [data-theme="dark"] .main-nav .nav-item {
+            border-right-color: var(--kt-border);
+        }
+
+    [data-theme="dark"] .kt-main-menu {
+        border-left-color: var(--kt-border);
+        border-right-color: var(--kt-border);
+    }
+
+    /* Dropdown */
+    [data-theme="dark"] .main-nav .nav-item.dropdown > .dropdown-menu {
+        background-color: #1a1d2e;
+        border: 1px solid var(--kt-border);
+    }
+
+    [data-theme="dark"] .main-nav .dropdown-item {
+        color: var(--kt-nav-text);
+    }
+
+        [data-theme="dark"] .main-nav .dropdown-item:hover,
+        [data-theme="dark"] .main-nav .dropdown-item:focus {
+            color: var(--kt-hellblau);
+            background-color: var(--kt-nav-hover-bg);
+        }
+
+    [data-theme="dark"] .main-nav .dropdown-divider {
+        border-color: var(--kt-border);
+    }
+
+    /* Karten / Cards */
+    [data-theme="dark"] .home-news-card,
+    [data-theme="dark"] .home-side-feed,
+    [data-theme="dark"] .job-card,
+    [data-theme="dark"] .poll-card,
+    [data-theme="dark"] .poll-detail-card,
+    [data-theme="dark"] .marketplace-card,
+    [data-theme="dark"] .marketplace-form-card,
+    [data-theme="dark"] .marketplace-detail,
+    [data-theme="dark"] .profile-card,
+    [data-theme="dark"] .jobs-toolbar,
+    [data-theme="dark"] .beauftragten-card,
+    [data-theme="dark"] .ersthelfer-card,
+    [data-theme="dark"] .abteilungen-list,
+    [data-theme="dark"] .mitarbeiter-suche,
+    [data-theme="dark"] .jobs-contact,
+    [data-theme="dark"] .dokumente-accordion-item {
+        background-color: #1e2130;
+        border-color: var(--kt-border);
+        color: #c8d0e0;
+    }
+
+    /* Accordion */
+    [data-theme="dark"] .dokumente-accordion .accordion-button {
+        background-color: #1e2130;
+        color: #c8d0e0;
+    }
+
+        [data-theme="dark"] .dokumente-accordion .accordion-button:not(.collapsed) {
+            background-color: var(--kt-dunkelblau);
+            color: #1e2130;
+        }
+
+    /* Formulare */
+    [data-theme="dark"] .form-control,
+    [data-theme="dark"] .form-select {
+        background-color: #252840;
+        border-color: var(--kt-border);
+        color: #c8d0e0;
+    }
+
+        [data-theme="dark"] .form-control:focus,
+        [data-theme="dark"] .form-select:focus {
+            background-color: #2a2e45;
+            border-color: var(--kt-hellblau);
+            color: #c8d0e0;
+        }
+
+        [data-theme="dark"] .form-control::placeholder {
+            color: var(--kt-text-muted);
+        }
+
+    /* Mitarbeitersuche Ergebnisse */
+    [data-theme="dark"] .mitarbeiter-suche-ergebnisse {
+        background-color: #1e2130;
+        border-color: var(--kt-border);
+    }
+
+    [data-theme="dark"] .mitarbeiter-suche-person {
+        background-color: #1e2130;
+    }
+
+        [data-theme="dark"] .mitarbeiter-suche-person:hover {
+            background-color: #252840;
+        }
+
+    [data-theme="dark"] .mitarbeiter-suche-eintrag {
+        border-bottom-color: var(--kt-border);
+    }
+
+    /* Abteilungen */
+    [data-theme="dark"] .abteilung-item {
+        background-color: #1e2130;
+        border-bottom-color: var(--kt-border);
+        color: #c8d0e0;
+    }
+
+        [data-theme="dark"] .abteilung-item:hover {
+            background-color: #252840;
+            color: var(--kt-hellblau);
+        }
+
+    /* Feed */
+    [data-theme="dark"] .home-feed-item {
+        border-bottom-color: var(--kt-border);
+    }
+
+        [data-theme="dark"] .home-feed-item:hover {
+            background-color: #252840;
+        }
+
+    [data-theme="dark"] .home-feed-section-title {
+        background-color: #252840;
+        border-bottom-color: var(--kt-border);
+        color: #c8d0e0;
+    }
+
+    /* Umfragen */
+    [data-theme="dark"] .home-poll-option,
+    [data-theme="dark"] .poll-detail-option {
+        background-color: #252840;
+        border-color: var(--kt-border);
+        color: #c8d0e0;
+    }
+
+        [data-theme="dark"] .home-poll-option:hover,
+        [data-theme="dark"] .poll-detail-option:hover {
+            background-color: #2a2e45;
+            border-color: var(--kt-hellblau);
+        }
+
+    /* Dokumente */
+    [data-theme="dark"] .dokumente-path {
+        background-color: #252840;
+    }
+
+    [data-theme="dark"] .dokumente-highlight {
+        background-color: #252840;
+        border-color: var(--kt-border);
+    }
+
+    /* Footer */
+    [data-theme="dark"] .kt-footer {
+        background-color: #1a1d2e;
+        border-top-color: var(--kt-border);
+    }
+
+    [data-theme="dark"] .kt-footer-bottom {
+        background-color: #161824;
+        border-top-color: var(--kt-border);
+    }
+
+    [data-theme="dark"] .kt-footer-link {
+        color: #c8d0e0;
+    }
+
+    [data-theme="dark"] .kt-footer-social-link {
+        color: #c8d0e0;
+    }
+
+    /* Profil */
+    [data-theme="dark"] .profile-row {
+        border-bottom-color: var(--kt-border);
+    }
+
+    /* Titel und Texte */
+    [data-theme="dark"] .kt-intranet-title,
+    [data-theme="dark"] .kt-user-name {
+        color: #c8d0e0;
+    }
+
+/* Dark Mode Toggle Button */
+#darkModeToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    margin-left: 1rem;
+    background: transparent;
+    border: 1px solid var(--kt-border);
+    border-radius: 50%;
+    color: var(--kt-dunkelblau);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+    #darkModeToggle:hover {
+        background-color: rgba(0, 145, 182, 0.1);
+        border-color: var(--kt-hellblau);
+        color: var(--kt-hellblau);
+    }
+
+[data-theme="dark"] #darkModeToggle {
+    color: #c8d0e0;
+    border-color: var(--kt-border);
+}
+
+    [data-theme="dark"] #darkModeToggle:hover {
+        background-color: rgba(41, 182, 216, 0.15);
+        border-color: var(--kt-hellblau);
+        color: var(--kt-hellblau);
+    }
+
+/* =========================================================
+   DARK MODE – BOOTSTRAP OVERRIDES & SEITENSPEZIFISCH
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   Bootstrap: .card (News, Gesundheitsvorsorge, etc.)
+   --------------------------------------------------------- */
+[data-theme="dark"] .card {
+    background-color: #1e2130;
+    border-color: #2e3348;
+    color: #c8d0e0;
+}
+
+    [data-theme="dark"] .card-title,
+    [data-theme="dark"] .card .fw-bold {
+        color: #e0e6f0;
+    }
+
+    [data-theme="dark"] .card-text,
+    [data-theme="dark"] .card .text-muted,
+    [data-theme="dark"] .text-muted {
+        color: #8a95a8 !important;
+    }
+
+[data-theme="dark"] .card-body {
+    background-color: #1e2130;
+}
+
+[data-theme="dark"] .card-img-top {
+    opacity: 0.88;
+}
+
+/* ---------------------------------------------------------
+   Bootstrap: Formulare in .card (News-Suche)
+   --------------------------------------------------------- */
+[data-theme="dark"] .card .form-control,
+[data-theme="dark"] .card .form-select,
+[data-theme="dark"] .card .form-label {
+    background-color: #252840;
+    border-color: #2e3348;
+    color: #c8d0e0;
+}
+
+    [data-theme="dark"] .card .form-control::placeholder {
+        color: #6a7488;
+    }
+
+    [data-theme="dark"] .card .form-control:focus,
+    [data-theme="dark"] .card .form-select:focus {
+        background-color: #2a2e45;
+        border-color: #29b6d8;
+        color: #c8d0e0;
+        box-shadow: 0 0 0 0.2rem rgba(41, 182, 216, 0.2);
+    }
+
+/* ---------------------------------------------------------
+   Bootstrap: Buttons (Outline-Varianten)
+   --------------------------------------------------------- */
+[data-theme="dark"] .btn-outline-secondary {
+    color: #a0aabb;
+    border-color: #3a3f58;
+}
+
+    [data-theme="dark"] .btn-outline-secondary:hover {
+        background-color: #2e3348;
+        color: #c8d0e0;
+        border-color: #4a5070;
+    }
+
+[data-theme="dark"] .btn-outline-primary {
+    color: #29b6d8;
+    border-color: #29b6d8;
+}
+
+    [data-theme="dark"] .btn-outline-primary:hover {
+        background-color: #29b6d8;
+        color: #161824;
+    }
+
+/* ---------------------------------------------------------
+   Bootstrap: Allgemeine Texte & Überschriften
+   --------------------------------------------------------- */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: #e0e6f0;
+}
+
+[data-theme="dark"] p {
+    color: #b0bcd0;
+}
+
+[data-theme="dark"] small,
+[data-theme="dark"] .small {
+    color: #8a95a8;
+}
+
+/* ---------------------------------------------------------
+   Bootstrap: Badge
+   --------------------------------------------------------- */
+[data-theme="dark"] .badge.bg-secondary {
+    background-color: #3a3f58 !important;
+    color: #c8d0e0;
+}
+
+/* ---------------------------------------------------------
+   Bootstrap: Alert
+   --------------------------------------------------------- */
+[data-theme="dark"] .alert-info {
+    background-color: #1a2a3a;
+    border-color: #1e4060;
+    color: #7ec8e3;
+}
+
+/* ---------------------------------------------------------
+   Ansprechpartner-Seite: Seitenspezifische Inline-Styles
+   --------------------------------------------------------- */
+[data-theme="dark"] .main-title {
+    color: #e0e6f0;
+}
+
+[data-theme="dark"] a.city-item {
+    color: #c8d0e0;
+    border-bottom-color: #29b6d8;
+}
+
+    [data-theme="dark"] a.city-item:hover {
+        background-color: #252840;
+        color: #29b6d8;
+    }
+
+[data-theme="dark"] .map-title {
+    color: #a8b8d8;
+}
+
+/* ---------------------------------------------------------
+   News-Seite: Container-Hintergrund
+   --------------------------------------------------------- */
+[data-theme="dark"] .container,
+[data-theme="dark"] .container-fluid {
+    color: #c8d0e0;
+}
+
+/* ---------------------------------------------------------
+   Bootstrap: form-label (außerhalb von .card)
+   --------------------------------------------------------- */
+[data-theme="dark"] .form-label {
+    color: #a0aabb;
+}
+
+/* ---------------------------------------------------------
+   Bootstrap: Schatten im Dark Mode dämpfen
+   --------------------------------------------------------- */
+[data-theme="dark"] .shadow-sm {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* ---------------------------------------------------------
+   Bootstrap: border-0 Karten (Gesundheitsvorsorge)
+   --------------------------------------------------------- */
+[data-theme="dark"] .card.border-0 {
+    border: 1px solid #2e3348 !important;
+}
+
+/* ---------------------------------------------------------
+   Mitarbeitersuche Partial (Ansprechpartner)
+   --------------------------------------------------------- */
+[data-theme="dark"] .mitarbeiter-suche-input {
+    background-color: #252840;
+    border-color: #2e3348;
+    color: #c8d0e0;
+}
+
+    [data-theme="dark"] .mitarbeiter-suche-input::placeholder {
+        color: #6a7488;
+    }
+
+[data-theme="dark"] .mitarbeiter-suche-label {
+    color: #e0e6f0;
+}
+
+[data-theme="dark"] .mitarbeiter-suche-hinweis {
+    color: #8a95a8;
+}
+
+/* Logo im Dark Mode tauschen */
+[data-theme="dark"] #kt-logo-img {
+    content: url("/Images/LogoKKT_dark.png");
+}
+
 
 /* =========================================================
    3. GLOBALE BASIS
