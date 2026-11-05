@@ -35,8 +35,6 @@ namespace Intranet2.Pages.Notfall
             "Hennings",
             "riemer",
             "freese",
-            "lieske",
-            "risthaus",
             "erlhoff",
             "kautz",
             "mindt",
